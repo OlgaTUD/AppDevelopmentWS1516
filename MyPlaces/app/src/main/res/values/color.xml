@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- MAIN MENU -->
+    <color name="list_background_pressed">#dbdbdb</color>
+    <color name="list_background">#f2f2f2</color>
+    <color name="text_list_item">#70000000</color>
+    <color name="white">#ffffff</color>
+
+
+    <!-- Blue -->
+    <color name="blue1">#2666AD</color>
+    <color name="blue2">#3C9CC6</color>
+    <color name="blue3">#67B8D6</color>
+    <color name="blue4">#8CD0E3</color>
+    <color name="blue5">#C0E0EF</color>
+
+
+</resources>
