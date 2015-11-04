@@ -9,11 +9,12 @@
 
 
     <!-- Blue -->
-    <color name="blue1">#2666AD</color>
-    <color name="blue2">#3C9CC6</color>
-    <color name="blue3">#67B8D6</color>
-    <color name="blue4">#8CD0E3</color>
+    <color name="blue1">#1976D2</color>
+    <color name="blue2">#2979FF</color>
+    <color name="blue3">#448AFF</color>
+    <color name="blue4">#82B1FF</color>
     <color name="blue5">#C0E0EF</color>
+    <color name="marker">#EC407A</color>
 
 
 </resources>
