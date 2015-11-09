@@ -9,12 +9,17 @@
 
 
     <!-- Blue -->
-    <color name="blue1">#1976D2</color>
+    <color name="blue1">#00487f</color>
     <color name="blue2">#2979FF</color>
     <color name="blue3">#448AFF</color>
     <color name="blue4">#82B1FF</color>
     <color name="blue5">#C0E0EF</color>
     <color name="marker">#EC407A</color>
+
+    <!-- Grey -->
+    <color name="grey1">#4d4d4d</color>
+    <color name="grey2">#747474</color>
+    <color name="grey3">#acacac</color>
 
 
 </resources>

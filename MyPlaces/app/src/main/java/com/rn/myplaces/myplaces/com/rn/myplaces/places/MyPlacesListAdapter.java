@@ -2,8 +2,6 @@ package com.rn.myplaces.myplaces.com.rn.myplaces.places;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,27 +15,20 @@ import com.rn.myplaces.myplaces.R;
  * Created by katamarka on 07/11/15.
  */
 
-    public class MyPlacesListAdapter extends ArrayAdapter<String> {
+    public class MyPlacesListAdapter extends ArrayAdapter {
 
         private final Activity context;
-        private final ImageView icon;
-        private final ImageView mapview;
-        private final ImageView listview;
-        private final TextView place_name;
-        private final TextView place_count;
+        private final String[] places;
+        private final Integer[] place_number;
 
 
 
-    public MyPlacesListAdapter(Activity context, ImageView icon, ImageView mapview, ImageView listview, TextView place_name,  TextView place_count) {
-            super(context, R.layout.myplaces_listitem);
-            // TODO Auto-generated constructor stub
+    public MyPlacesListAdapter(Activity context,int resource, String[] places,  Integer[] place_number) {
+            super(context, R.layout.myplaces_listitem, places);
 
             this.context=context;
-            this.icon=icon;
-            this.mapview=mapview;
-            this.listview = listview;
-            this.place_count = place_count;
-            this.place_name = place_name;
+            this.place_number = place_number;
+            this.places = places;
         }
 
         @SuppressLint({ "ViewHolder", "InflateParams", "CutPasteId" })
@@ -47,84 +38,42 @@ import com.rn.myplaces.myplaces.R;
 
             TextView place_name = (TextView) rowView.findViewById(R.id.place_name);
             TextView place_count = (TextView) rowView.findViewById(R.id.place_count);
-            ImageView icon = (ImageView) rowView.findViewById(R.id.icon);
             ImageView mapView = (ImageView) rowView.findViewById(R.id.icon_mapview);
             ImageView listView = (ImageView) rowView.findViewById(R.id.icon_listview);
 
 
-            txtTitle.setText(itemname[position]);
-            imageView.setImageResource(imgid[position%8]);
-            txtUnten.setText(rating_count[position] + " 'Gefällt mir'-Angaben " + comment_count[position] + " Kommentar(e)");
-            comment.setText("Kommentieren");
-            like.setText("Gefällt mir");
-            name.setText(messageOwners[position]);
-            timestamp.setText(date[position]);
-            share.setText("Teilen");
+           place_name.setText(places[position]);
+           place_count.setText(place_number[position]+" Places");
 
-
-
-
-
-//			Define text view for the comment function and set OnClickListener
-            comment.setOnClickListener(new View.OnClickListener() {
-                @Override
+            mapView.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    onCommentClick(messageID[position]);
+                    mapViewClick();
                 }
             });
 
-//			Define text view for the comment function and set OnClickListener
-            like.setOnClickListener(new View.OnClickListener() {
-                @Override
+            listView.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    onLikeClick();
-                    like.setTextColor(context.getResources().getColor(R.color.green3));
-
+                    listViewClick();
                 }
             });
-
-//			Define text view for the share function and set OnClickListener
-            share.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onShareClick();
-                }
-            });
-
 
             return rowView;
         };
 
 
-        //		"Kommentieren" button clicked
-        public void onCommentClick(String messageID) {
-//			Perform action on click
-            SocialMediaCommentsDialog.newInstance(messageID).show(context.getFragmentManager(), null);
-        }
-
-        //		"Like" button clicked
-        public void onLikeClick() {
-
+        //		"MapView" button clicked
+        public void mapViewClick() {
 //			Perform action on click
 
         }
 
-        //		"Share" button clicked
-        @SuppressWarnings("deprecation")
-        public void onShareClick() {
+        //		"ListView" button clicked
+        public void listViewClick() {
 //			Perform action on click
-            AlertDialog alertDialog = new AlertDialog.Builder(context).create();
-            alertDialog.setTitle("Share");
-            alertDialog.setMessage("Hier kann man TEILEN");
-            alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
-            alertDialog.show();
+
         }
 
     }
 
 
-}
+
