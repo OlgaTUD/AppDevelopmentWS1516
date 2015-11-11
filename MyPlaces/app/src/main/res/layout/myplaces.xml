@@ -12,6 +12,12 @@
         android:id="@+id/frameLayout">
 
 
+        <ListView
+            android:id="@+id/list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+
     <ImageButton
         android:layout_margin="15dp"
         android:layout_width="70dp"
@@ -19,12 +25,11 @@
         android:src="@drawable/ic_action_plus"
         android:background="@drawable/floating_button"
         android:id="@+id/imageButton"
-        android:layout_gravity="right|bottom" />
+        android:layout_gravity="right|bottom"
+        android:stateListAnimator="@anim/raise" />
 
-    <ListView
-        android:id="@+id/list_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+
+
     </FrameLayout>
 
 </RelativeLayout>

@@ -48,19 +48,19 @@
         android:gravity="right"
         android:orientation = "horizontal">
 
-    <ImageView
+    <ImageButton
         android:id="@+id/icon_mapview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="5dp"
+        android:layout_marginRight="10dp"
         android:background="@drawable/ic_action_map"/>
 
-    <ImageView
+    <ImageButton
         android:id="@+id/icon_listview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/icon_mapview"
-        android:layout_marginRight="5dp"
+        android:layout_marginRight="10dp"
         android:background="@drawable/ic_action_list"/>
 
     </LinearLayout>

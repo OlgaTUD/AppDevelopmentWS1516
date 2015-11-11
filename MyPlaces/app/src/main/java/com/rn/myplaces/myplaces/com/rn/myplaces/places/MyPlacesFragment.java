@@ -3,24 +3,24 @@ package com.rn.myplaces.myplaces.com.rn.myplaces.places;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.rn.myplaces.myplaces.MainActivity;
 import com.rn.myplaces.myplaces.R;
+
 
 /**
  * Created by katamarka on 04/11/15.
  */
 public class MyPlacesFragment extends Fragment {
 
-    Toolbar toolbar;
     ImageButton FAB;
 
     public static MyPlacesFragment  newInstance() {
@@ -51,9 +51,7 @@ public class MyPlacesFragment extends Fragment {
         FAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Toast.makeText(getActivity(), "Hello World", Toast.LENGTH_SHORT).show();
-
+                animateClick(FAB);
             }
         });
 
@@ -64,6 +62,11 @@ public class MyPlacesFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         ((MainActivity) activity).onSectionAttached(1);
+    }
+
+    public void animateClick(ImageButton img){
+        Animation shake = AnimationUtils.loadAnimation(getActivity(), R.anim.raise);
+        img.startAnimation(shake);
     }
 }
 
