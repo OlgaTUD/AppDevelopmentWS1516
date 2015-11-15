@@ -1,14 +1,21 @@
 package com.rn.myplaces.myplaces.com.rn.myplaces.mapview;
 
 import android.app.Activity;
+import android.content.Context;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.SyncStateContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -22,6 +29,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap map;
     private MapFragment mMapFragment;
+    private Button button;
 
     public static MapViewFragment newInstance() {
         MapViewFragment fragment = new MapViewFragment();
@@ -34,22 +42,65 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.mapview, container, false);
-        map = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.location_map))
+        map = ((SupportMapFragment) getChildFragmentManager()
+                .findFragmentById(R.id.location_map))
                 .getMap();
+        map.setMyLocationEnabled(true);
 
+        map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+
+            @Override
+            public void onMapClick(LatLng latLng) {
+
+                // Creating a marker
+                MarkerOptions markerOptions = new MarkerOptions();
+
+                // Setting the position for the marker
+                markerOptions.position(latLng);
+
+                // Setting the title for the marker.
+                // This will be displayed on taping the marker
+                markerOptions.title(latLng.latitude + " : " + latLng.longitude);
+
+                // Clears the previously touched position
+                map.clear();
+
+                // Animating to the touched position
+                map.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+
+                // Placing a marker on the touched position
+                map.addMarker(markerOptions);
+            }
+        });
+
+        button  = (Button) rootView.findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+               jumpToCurLocation(map.getMyLocation());
+
+            }
+        });
 
         return rootView;
     }
+
     @Override
     public void onMapReady(GoogleMap map) {
-        map.addMarker(new MarkerOptions()
-                .position(new LatLng(0, 0))
-                .title("Marker"));
+        jumpToCurLocation(map.getMyLocation());
     }
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         ((MainActivity) activity).onSectionAttached(1);
+    }
+
+    public void jumpToCurLocation(Location location){
+
+                    CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude()));
+                    CameraUpdate zoom = CameraUpdateFactory.zoomTo(11);
+                    map.moveCamera(center);
+                    map.animateCamera(zoom);
     }
 }
 
