@@ -1,18 +1,15 @@
 package com.rn.myplaces.myplaces.com.rn.myplaces.mapview;
 
 import android.app.Activity;
-import android.content.Context;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.provider.SyncStateContract;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageButton;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -29,7 +26,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap map;
     private MapFragment mMapFragment;
-    private Button button;
+    private ImageButton button;
 
     public static MapViewFragment newInstance() {
         MapViewFragment fragment = new MapViewFragment();
@@ -73,12 +70,12 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
-        button  = (Button) rootView.findViewById(R.id.button);
+        button  = (ImageButton) rootView.findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
-               jumpToCurLocation(map.getMyLocation());
-
+                animateClick(button);
+                jumpToCurLocation(map.getMyLocation());
             }
         });
 
@@ -101,6 +98,12 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
                     CameraUpdate zoom = CameraUpdateFactory.zoomTo(11);
                     map.moveCamera(center);
                     map.animateCamera(zoom);
+    }
+
+    //animation for buttons and icons
+    public void animateClick(ImageButton img){
+        Animation shake = AnimationUtils.loadAnimation(getActivity(), R.anim.raise);
+        img.startAnimation(shake);
     }
 }
 

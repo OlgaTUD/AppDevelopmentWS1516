@@ -36,6 +36,7 @@ public class MyPlacesFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.myplaces, container, false);
         ListView listview =(ListView) rootView.findViewById(R.id.list_view);
 
+
         //List of Places
 
         String[] places_name = new String[] {"Dresden", "Rome", "Paris"};

@@ -29,7 +29,7 @@ import com.rn.myplaces.myplaces.com.rn.myplaces.mapview.MapViewFragment;
         private final Activity context;
         private final String[] places;
         private final Integer[] place_number;
-    public  FragmentManager fragmentManager;
+        public  FragmentManager fragmentManager;
 
 
 

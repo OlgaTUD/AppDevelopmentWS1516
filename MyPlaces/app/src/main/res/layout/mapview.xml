@@ -3,24 +3,20 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="MapView"
-        android:textSize="20sp" />
-
     <fragment
         android:id="@+id/location_map"
         android:layout_width="match_parent"
-        android:layout_height="399dp"
+        android:layout_height="54dp"
         class="com.google.android.gms.maps.SupportMapFragment" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="My Location"
+    <ImageButton
+        android:layout_margin="15dp"
+        android:layout_width="70dp"
+        android:layout_height="450dp"
+        android:src="@drawable/ic_my_location_white"
+        android:background="@drawable/floating_button"
         android:id="@+id/button"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="right|bottom"
+        android:stateListAnimator="@anim/raise" />
 
 </LinearLayout>
