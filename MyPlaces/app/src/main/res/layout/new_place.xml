@@ -30,7 +30,8 @@
                 android:minWidth="250dp"
                 android:padding="7dp"
                 android:typeface="serif"
-                android:textCursorDrawable="@drawable/color_cursor"></EditText>
+                android:textCursorDrawable="@drawable/color_cursor"
+                android:drawableBottom="@color/marker"></EditText>
         </TableRow>
 
         <TableRow
@@ -45,7 +46,8 @@
                 android:padding="7dp"></TextView>
             <EditText
                 android:id="@+id/location_field"
-                android:padding="7dp"></EditText>
+                android:padding="7dp"
+                android:textCursorDrawable="@drawable/color_cursor">></EditText>
         </TableRow>
 
         <TableRow
@@ -60,7 +62,8 @@
                 android:padding="7dp"></TextView>
             <EditText
                 android:id="@+id/description_field"
-                android:padding="7dp"></EditText>
+                android:padding="7dp"
+                android:textCursorDrawable="@drawable/color_cursor">></EditText>
 
         </TableRow>
 
@@ -76,7 +79,8 @@
                 android:padding="7dp"></TextView>
             <EditText
                 android:id="@+id/marker_field"
-                android:padding="7dp"></EditText>
+                android:padding="7dp"
+                android:textCursorDrawable="@drawable/color_cursor">></EditText>
         </TableRow>
 
         <TableRow
@@ -91,7 +95,8 @@
                 android:padding="7dp"></TextView>
             <EditText
                 android:id="@+id/notf_field"
-                android:padding="7dp"></EditText>
+                android:padding="7dp"
+                android:textCursorDrawable="@drawable/color_cursor"></EditText>
         </TableRow>
 
     </TableLayout>

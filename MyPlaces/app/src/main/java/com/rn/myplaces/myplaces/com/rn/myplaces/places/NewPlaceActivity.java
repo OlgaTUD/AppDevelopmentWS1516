@@ -37,7 +37,7 @@ public class NewPlaceActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.new_place, menu);
         return true;
     }
 
@@ -53,12 +53,12 @@ public class NewPlaceActivity extends AppCompatActivity {
             return true;
         }
 
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.ok) {
+            finish();
 
             return true;
         }
+
 
         return super.onOptionsItemSelected(item);
     }
