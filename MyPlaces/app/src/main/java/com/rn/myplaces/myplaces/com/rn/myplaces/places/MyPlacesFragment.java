@@ -1,6 +1,7 @@
 package com.rn.myplaces.myplaces.com.rn.myplaces.places;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -53,17 +54,19 @@ public class MyPlacesFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 animateClick(FAB);
+//                Fragment tf = NewPlaceFragment.newInstance();
+//                FragmentTransaction ft = ((FragmentActivity) getContext()).getSupportFragmentManager().beginTransaction();
+//                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+//                ft.setTransitionStyle(FragmentTransaction.TRANSIT_NONE);
+//                ft.replace(R.id.container, tf);
+//                ft.addToBackStack(null);
+//                ft.commit();
+
+                Intent intent = new Intent(getContext(), NewPlaceActivity.class);
+                startActivity(intent);
             }
         });
 
-        //listitem clicked
-//
-//        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//
-//            }
-//        });
 
         return rootView;
     }

@@ -90,7 +90,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        ((MainActivity) activity).onSectionAttached(1);
+        ((MainActivity) activity).onSectionAttached(2);
     }
 
     public void jumpToCurLocation(Location location){

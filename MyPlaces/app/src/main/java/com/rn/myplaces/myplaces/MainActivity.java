@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
-    private CharSequence mTitle;
+    public static CharSequence mTitle;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
 
@@ -87,6 +87,12 @@ public class MainActivity extends AppCompatActivity
             case 4:
                 mTitle = getString(R.string.title_section4);
                 break;
+
+            case 5:
+                mTitle = "A";
+                break;
+
+
         }
     }
 

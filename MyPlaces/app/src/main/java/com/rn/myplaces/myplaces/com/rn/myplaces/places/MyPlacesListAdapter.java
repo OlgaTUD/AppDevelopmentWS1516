@@ -27,7 +27,7 @@ import com.rn.myplaces.myplaces.com.rn.myplaces.mapview.MapViewFragment;
     public class MyPlacesListAdapter extends ArrayAdapter {
 
         private final Activity context;
-        private final String[] places;
+        public static  String[] places;
         private final Integer[] place_number;
         public  FragmentManager fragmentManager;
 
@@ -47,7 +47,7 @@ import com.rn.myplaces.myplaces.com.rn.myplaces.mapview.MapViewFragment;
             LayoutInflater inflater=context.getLayoutInflater();
             View rowView=inflater.inflate(R.layout.myplaces_listitem, null, true);
 
-            TextView place_name = (TextView) rowView.findViewById(R.id.place_name);
+            final TextView place_name = (TextView) rowView.findViewById(R.id.place_name);
             TextView place_count = (TextView) rowView.findViewById(R.id.place_count);
             final ImageButton mapView = (ImageButton) rowView.findViewById(R.id.icon_mapview);
             final ImageButton listView = (ImageButton) rowView.findViewById(R.id.icon_listview);
@@ -100,6 +100,22 @@ import com.rn.myplaces.myplaces.com.rn.myplaces.mapview.MapViewFragment;
                 }
             });
 
+            rowView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    v.setBackgroundColor(context.getResources().getColor(R.color.grey4));
+                    Fragment tf = MyPlacesListViewFragment.newInstance();
+                    FragmentTransaction ft = ((FragmentActivity)getContext()).getSupportFragmentManager().beginTransaction();
+                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                    ft.setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                    ft.replace(R.id.container, tf);
+                    ft.addToBackStack(null);
+                    ft.commit();
+
+                    return(false);
+                }
+            });
+
 
             return rowView;
         };
@@ -133,7 +149,6 @@ import com.rn.myplaces.myplaces.com.rn.myplaces.mapview.MapViewFragment;
 
 
         }
-
 
     }
 

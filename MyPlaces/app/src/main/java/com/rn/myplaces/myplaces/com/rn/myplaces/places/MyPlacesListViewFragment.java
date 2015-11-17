@@ -21,7 +21,7 @@ import com.rn.myplaces.myplaces.R;
  */
 public class MyPlacesListViewFragment extends Fragment {
 
-    ImageButton FAB;
+    ImageButton FAB2;
 
     public static MyPlacesListViewFragment newInstance() {
         MyPlacesListViewFragment fragment = new MyPlacesListViewFragment();
@@ -50,11 +50,11 @@ public class MyPlacesListViewFragment extends Fragment {
 
         //Round button
 
-        FAB = (ImageButton) rootView.findViewById(R.id.imageButton_lv);
-        FAB.setOnClickListener(new View.OnClickListener() {
+        FAB2 = (ImageButton) rootView.findViewById(R.id.imageButton_lv);
+        FAB2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                animateClick(FAB);
+                animateClick(FAB2);
             }
         });
 
@@ -64,7 +64,7 @@ public class MyPlacesListViewFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        ((MainActivity) activity).onSectionAttached(1);
+        ((MainActivity) activity).onSectionAttached(5);
     }
 
     public void animateClick(ImageButton img){
