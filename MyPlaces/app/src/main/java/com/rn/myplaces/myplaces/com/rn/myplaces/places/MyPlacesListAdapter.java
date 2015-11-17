@@ -90,6 +90,7 @@ import com.rn.myplaces.myplaces.com.rn.myplaces.mapview.MapViewFragment;
                     }
 
                     if (event.getAction() == MotionEvent.ACTION_UP) {
+                        listViewClick();
 
 
                         return true;
@@ -121,6 +122,14 @@ import com.rn.myplaces.myplaces.com.rn.myplaces.mapview.MapViewFragment;
         //		"ListView" button clicked
         public void listViewClick() {
 //			Perform action on click
+
+            Fragment tf = new MyPlacesListViewFragment();
+            FragmentTransaction ft = ((FragmentActivity)context).getSupportFragmentManager().beginTransaction();
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            ft.setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+            ft.replace(R.id.container, tf);
+            ft.addToBackStack(null);
+            ft.commit();
 
 
         }

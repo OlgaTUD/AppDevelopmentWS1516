@@ -13,4 +13,10 @@
 
     <string name="action_settings">Settings</string>
     <string name="title_activity_maps">Map</string>
+
+    <string name="my_places">My Places</string>
+    <string name="maps_view">Map View</string>
+    <string name="maps_view_list">Map</string>
+    <string name="settings">Settings</string>
+    <string name="impressum">Impressum</string>
 </resources>

@@ -43,6 +43,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
                 .findFragmentById(R.id.location_map))
                 .getMap();
         map.setMyLocationEnabled(true);
+        map.getUiSettings().setMyLocationButtonEnabled(false);
 
         map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
 
@@ -105,6 +106,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
         Animation shake = AnimationUtils.loadAnimation(getActivity(), R.anim.raise);
         img.startAnimation(shake);
     }
+
 }
 
 

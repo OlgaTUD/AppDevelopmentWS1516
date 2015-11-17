@@ -19,51 +19,44 @@ import com.rn.myplaces.myplaces.R;
 /**
  * Created by katamarka on 04/11/15.
  */
-public class MyPlacesFragment extends Fragment {
+public class MyPlacesListViewFragment extends Fragment {
 
     ImageButton FAB;
 
-    public static MyPlacesFragment  newInstance() {
-        MyPlacesFragment fragment = new MyPlacesFragment();
+    public static MyPlacesListViewFragment newInstance() {
+        MyPlacesListViewFragment fragment = new MyPlacesListViewFragment();
         return fragment;
     }
 
-    public MyPlacesFragment() {
+    public MyPlacesListViewFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.myplaces, container, false);
-        ListView listview =(ListView) rootView.findViewById(R.id.list_view);
+        View rootView = inflater.inflate(R.layout.myplaces_listview, container, false);
+        ListView listview =(ListView) rootView.findViewById(R.id.list_view_lv);
 
 
         //List of Places
 
-        String[] places_name = new String[] {"Dresden", "Rome", "Paris"};
-        Integer[] places_count = new Integer[] {8, 12, 14};
+        String[] places_name = new String[] {"Place 1", "Place 2", "Place 3", "Place 4"};
+        Integer[] places_count = new Integer[] {800, 1200, 1400, 2000};
+        Integer[] places_marker = new Integer[] {R.drawable.ic_loc_blue, R.drawable.ic_loc_green, R.drawable.ic_loc_orange, R.drawable.ic_loc_grey};
+
 
         ArrayAdapter adapter =
-                new MyPlacesListAdapter(getActivity(), R.layout.myplaces_listitem, places_name, places_count);
+                new MyPlacesListViewAdapter(getActivity(), R.layout.myplaces_listitem2, places_name, places_count, places_marker);
         listview.setAdapter(adapter);
 
         //Round button
 
-        FAB = (ImageButton) rootView.findViewById(R.id.imageButton);
+        FAB = (ImageButton) rootView.findViewById(R.id.imageButton_lv);
         FAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 animateClick(FAB);
             }
         });
-
-        //listitem clicked
-//
-//        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//
-//            }
-//        });
 
         return rootView;
     }
@@ -78,8 +71,6 @@ public class MyPlacesFragment extends Fragment {
         Animation shake = AnimationUtils.loadAnimation(getActivity(), R.anim.raise);
         img.startAnimation(shake);
     }
-
-
 }
 
 
