@@ -15,6 +15,10 @@ import android.widget.ListView;
 
 import com.rn.myplaces.myplaces.MainActivity;
 import com.rn.myplaces.myplaces.R;
+import com.rn.myplaces.myplaces.com.rn.myplaces.database.MySQLiteHelper;
+import com.rn.myplaces.myplaces.com.rn.myplaces.database.Place;
+
+import java.util.ArrayList;
 
 
 /**
@@ -37,11 +41,20 @@ public class MyPlacesFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.myplaces, container, false);
         ListView listview =(ListView) rootView.findViewById(R.id.list_view);
 
+        MySQLiteHelper db = new MySQLiteHelper(getActivity());
+        if (db.getAllPlaces().isEmpty()){
+            db.addPlace(new Place("Museum","Dresden"));
+        }
+       //
 
-        //List of Places
-
-        String[] places_name = new String[] {"Dresden", "Rome", "Paris"};
-        Integer[] places_count = new Integer[] {8, 12, 14};
+        ArrayList<String> places_name = new ArrayList<String>();
+        ArrayList<Integer> places_count = new ArrayList<Integer>();
+        for (Place p : db.getAllPlaces()){
+            db.deletePlace(p);
+            places_name.add(p.getCity());
+            places_count.add(5);
+            System.out.println(p.getPlace());
+        }
 
         ArrayAdapter adapter =
                 new MyPlacesListAdapter(getActivity(), R.layout.myplaces_listitem, places_name, places_count);
