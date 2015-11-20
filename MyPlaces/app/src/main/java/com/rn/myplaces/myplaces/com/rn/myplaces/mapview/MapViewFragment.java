@@ -1,6 +1,8 @@
 package com.rn.myplaces.myplaces.com.rn.myplaces.mapview;
 
 import android.app.Activity;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -21,6 +23,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.rn.myplaces.myplaces.MainActivity;
 import com.rn.myplaces.myplaces.R;
+
+import java.io.IOException;
+import java.util.List;
 
 public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
@@ -56,12 +61,33 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
                 // Setting the position for the marker
                 markerOptions.position(latLng);
 
-                // Setting the title for the marker.
-                // This will be displayed on taping the marker
-                markerOptions.title(latLng.latitude + " : " + latLng.longitude);
+
 
                 // Clears the previously touched position
                 map.clear();
+
+                Geocoder geoCoder = new Geocoder(getContext());
+                List<Address> matches = null;
+                try {
+                    matches = geoCoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                Address bestMatch;
+                if (matches != null) {
+                    bestMatch = (matches.isEmpty() ? null : matches.get(0));
+                    if (bestMatch != null) {
+                        markerOptions.title(bestMatch.getAddressLine(0));
+                    }
+                }
+
+                // GET STREET
+                //bestMatch.getAddressLine(0)
+
+                //GET PLZ + CITY
+                //bestMatch.getAddressLine(1)
+
 
                 // Animating to the touched position
                 map.animateCamera(CameraUpdateFactory.newLatLng(latLng));
@@ -71,7 +97,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
-        button  = (ImageButton) rootView.findViewById(R.id.button);
+        button = (ImageButton) rootView.findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
@@ -96,7 +122,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
     public void jumpToCurLocation(Location location){
 
                     CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude()));
-                    CameraUpdate zoom = CameraUpdateFactory.zoomTo(11);
+        CameraUpdate zoom = CameraUpdateFactory.zoomTo(11);
                     map.moveCamera(center);
                     map.animateCamera(zoom);
     }
