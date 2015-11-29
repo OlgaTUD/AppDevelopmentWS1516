@@ -241,8 +241,9 @@ public class NavigationDrawerFragment extends Fragment {
         // If the drawer is open, show the global app actions in the action bar. See also
         // showGlobalContextActionBar, which controls the top-left area of the action bar.
         if (mDrawerLayout != null && isDrawerOpen()) {
-            inflater.inflate(R.menu.global, menu);
-            showGlobalContextActionBar();
+                inflater.inflate(R.menu.main, menu);
+                showGlobalContextActionBar();
+                // Associate searchable configuration with the SearchView
         }
         super.onCreateOptionsMenu(menu, inflater);
     }
@@ -271,6 +272,7 @@ public class NavigationDrawerFragment extends Fragment {
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 //        actionBar.setTitle(R.string.app_name);
         actionBar.setDisplayHomeAsUpEnabled(true);
+
     }
 
     private ActionBar getActionBar() {

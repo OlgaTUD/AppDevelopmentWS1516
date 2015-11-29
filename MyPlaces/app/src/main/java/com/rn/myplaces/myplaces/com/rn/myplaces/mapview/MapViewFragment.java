@@ -23,6 +23,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.rn.myplaces.myplaces.MainActivity;
 import com.rn.myplaces.myplaces.R;
+import com.rn.myplaces.myplaces.com.rn.myplaces.places.MyPlacesFragment;
 
 import java.io.IOException;
 import java.util.List;
@@ -44,6 +45,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.mapview, container, false);
+        MyPlacesFragment.isVisible = false;
         map = ((SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.location_map))
                 .getMap();
@@ -60,8 +62,6 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
                 // Setting the position for the marker
                 markerOptions.position(latLng);
-
-
 
                 // Clears the previously touched position
                 map.clear();
@@ -122,7 +122,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
     public void jumpToCurLocation(Location location){
 
                     CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude()));
-        CameraUpdate zoom = CameraUpdateFactory.zoomTo(11);
+                    CameraUpdate zoom = CameraUpdateFactory.zoomTo(11);
                     map.moveCamera(center);
                     map.animateCamera(zoom);
     }

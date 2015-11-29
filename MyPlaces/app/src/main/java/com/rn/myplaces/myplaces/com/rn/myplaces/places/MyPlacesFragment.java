@@ -27,6 +27,7 @@ import java.util.ArrayList;
 public class MyPlacesFragment extends Fragment {
 
     ImageButton FAB;
+    public static boolean isVisible = false;
 
     public static MyPlacesFragment  newInstance() {
         MyPlacesFragment fragment = new MyPlacesFragment();
@@ -40,6 +41,7 @@ public class MyPlacesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.myplaces, container, false);
         ListView listview =(ListView) rootView.findViewById(R.id.list_view);
+        isVisible = true;
 
         MySQLiteHelper db = new MySQLiteHelper(getActivity());
         if (db.getAllPlaces().isEmpty()){
@@ -94,6 +96,7 @@ public class MyPlacesFragment extends Fragment {
         Animation shake = AnimationUtils.loadAnimation(getActivity(), R.anim.raise);
         img.startAnimation(shake);
     }
+
 
 
 }

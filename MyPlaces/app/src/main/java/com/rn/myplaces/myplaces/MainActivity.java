@@ -1,5 +1,7 @@
 package com.rn.myplaces.myplaces;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -7,6 +9,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -118,6 +121,12 @@ public class MainActivity extends AppCompatActivity
             // decide what to show in the action bar.
             getMenuInflater().inflate(R.menu.main, menu);
             restoreActionBar();
+            SearchManager searchManager =
+                    (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+            SearchView searchView =
+                    (SearchView) menu.findItem(R.id.search).getActionView();
+            searchView.setSearchableInfo(
+                    searchManager.getSearchableInfo(getComponentName()));
             return true;
         }
         return super.onCreateOptionsMenu(menu);
@@ -135,7 +144,20 @@ public class MainActivity extends AppCompatActivity
 //            return true;
 //        }
 
+        if (id == R.id.search) {
+            onSearchRequested();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onSearchRequested() {
+        Bundle appData = new Bundle();
+        appData.putString("hello", "world");
+        startSearch(null, false, appData, false);
+        return true;
     }
 
 }
