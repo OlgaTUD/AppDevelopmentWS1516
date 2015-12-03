@@ -23,6 +23,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.rn.myplaces.myplaces.MainActivity;
 import com.rn.myplaces.myplaces.R;
+import com.rn.myplaces.myplaces.com.rn.myplaces.database.MySQLiteHelper;
+import com.rn.myplaces.myplaces.com.rn.myplaces.database.Place;
 import com.rn.myplaces.myplaces.com.rn.myplaces.places.MyPlacesFragment;
 
 import java.io.IOException;
@@ -33,6 +35,12 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap map;
     private MapFragment mMapFragment;
     private ImageButton button;
+    private ImageButton button2;
+    private ImageButton button3;
+    boolean markerset;
+    private MarkerOptions currentMarker = null ;
+
+    private MySQLiteHelper db;
 
     public static MapViewFragment newInstance() {
         MapViewFragment fragment = new MapViewFragment();
@@ -44,8 +52,10 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        db = MySQLiteHelper.getInstance(getContext());
         View rootView = inflater.inflate(R.layout.mapview, container, false);
         MyPlacesFragment.isVisible = false;
+        markerset = false;
         map = ((SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.location_map))
                 .getMap();
@@ -62,32 +72,10 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
                 // Setting the position for the marker
                 markerOptions.position(latLng);
-
+                currentMarker = markerOptions;
+                markerset = true;
                 // Clears the previously touched position
                 map.clear();
-
-                Geocoder geoCoder = new Geocoder(getContext());
-                List<Address> matches = null;
-                try {
-                    matches = geoCoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                Address bestMatch;
-                if (matches != null) {
-                    bestMatch = (matches.isEmpty() ? null : matches.get(0));
-                    if (bestMatch != null) {
-                        markerOptions.title(bestMatch.getAddressLine(0));
-                    }
-                }
-
-                // GET STREET
-                //bestMatch.getAddressLine(0)
-
-                //GET PLZ + CITY
-                //bestMatch.getAddressLine(1)
-
 
                 // Animating to the touched position
                 map.animateCamera(CameraUpdateFactory.newLatLng(latLng));
@@ -103,6 +91,58 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
             public void onClick(View v) {
                 animateClick(button);
                 jumpToCurLocation(map.getMyLocation());
+            }
+        });
+
+        button2 = (ImageButton) rootView.findViewById(R.id.button2);
+        button2.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                System.out.println("123");
+                if (markerset) {
+
+                    Geocoder geoCoder = new Geocoder(getContext());
+                    List<Address> matches = null;
+                    try {
+                        matches = geoCoder.getFromLocation(currentMarker.getPosition().latitude, currentMarker.getPosition().longitude, 1);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    Address bestMatch;
+                    if (matches != null) {
+                        bestMatch = (matches.isEmpty() ? null : matches.get(0));
+                        if (bestMatch != null) {
+
+                            //TODO GET CITY !!!!
+                            currentMarker.title(bestMatch.getAddressLine(0));
+                            String[] city = bestMatch.getAddressLine(1).split(" ");
+
+                            db.addPlace(new Place(bestMatch.getAddressLine(0), city[1]));
+                        }
+                    }
+
+
+                    // GET STREET
+                    //bestMatch.getAddressLine(0)
+
+                    //GET PLZ + CITY
+                    //bestMatch.getAddressLine(1)
+
+                }
+
+            }
+        });
+
+        button3 = (ImageButton) rootView.findViewById(R.id.button3);
+        button3.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                for (Place p : db.getAllPlaces()){
+                    db.deletePlace(p);
+                }
+
+
             }
         });
 

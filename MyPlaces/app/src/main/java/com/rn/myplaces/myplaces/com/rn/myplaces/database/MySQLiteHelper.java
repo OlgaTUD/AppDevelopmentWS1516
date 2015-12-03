@@ -15,6 +15,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     // All Static variables
     // Database Version
     private static final int DATABASE_VERSION = 1;
+    private static MySQLiteHelper sInstance;
 
     // Database Name
     private static final String DATABASE_NAME = "myplaces";
@@ -27,9 +28,17 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     private static final String PLACE_NAME = "name";
     private static final String PLACE_CITY = "city";
 
-    public MySQLiteHelper(Context context) {
+    public static synchronized MySQLiteHelper getInstance(Context context) {
+        if (sInstance == null) {
+            sInstance = new MySQLiteHelper(context.getApplicationContext());
+        }
+        return sInstance;
+    }
+
+    private MySQLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
+
 
     // Creating Tables
     @Override
@@ -59,7 +68,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(PLACE_NAME, place.getPlace()); //
+        values.put(PLACE_NAME, place.getName()); //
         values.put(PLACE_CITY, place.getCity()); //
 
         // Inserting Row
@@ -97,7 +106,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             do {
                 Place place = new Place();
                 place.setId(Integer.parseInt(cursor.getString(0)));
-                place.setPlace(cursor.getString(1));
+                place.setName(cursor.getString(1));
                 place.setCity(cursor.getString(2));
                 // Adding place to list
                 placesList.add(place);
@@ -113,7 +122,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(PLACE_NAME, place.getPlace());
+        values.put(PLACE_NAME, place.getName());
         values.put(PLACE_CITY, place.getCity());
 
         // updating row

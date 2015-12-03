@@ -28,6 +28,7 @@ public class MyPlacesFragment extends Fragment {
 
     ImageButton FAB;
     public static boolean isVisible = false;
+    private MySQLiteHelper db;
 
     public static MyPlacesFragment  newInstance() {
         MyPlacesFragment fragment = new MyPlacesFragment();
@@ -42,20 +43,24 @@ public class MyPlacesFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.myplaces, container, false);
         ListView listview =(ListView) rootView.findViewById(R.id.list_view);
         isVisible = true;
-
-        MySQLiteHelper db = new MySQLiteHelper(getActivity());
-        if (db.getAllPlaces().isEmpty()){
-            db.addPlace(new Place("Museum","Dresden"));
-        }
-       //
+        db = MySQLiteHelper.getInstance(getContext());
 
         ArrayList<String> places_name = new ArrayList<String>();
         ArrayList<Integer> places_count = new ArrayList<Integer>();
+
         for (Place p : db.getAllPlaces()){
-            db.deletePlace(p);
-            places_name.add(p.getCity());
-            places_count.add(5);
-            System.out.println(p.getPlace());
+
+            if(places_name.isEmpty() || !places_name.contains(p.getCity())){
+                places_name.add(p.getCity());
+                places_count.add(1);
+            }
+
+            if(places_name.contains(p.getCity()))
+            {
+                int index = places_name.indexOf(p.getCity());
+                places_count.set(index,places_count.get(index)+1);
+            }
+
         }
 
         ArrayAdapter adapter =

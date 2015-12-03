@@ -2,17 +2,17 @@ package com.rn.myplaces.myplaces.com.rn.myplaces.database;
 
 public class Place {
     private long id;
-    private String place;
+    private String name;
     private String city;
 
-    public Place(int id, String place, String city){
+    public Place(int id, String name, String city){
         this.id = id;
-        this.place = place;
+        this.name = name;
         this.city = city;
     }
 
-    public Place(String place, String city){
-        this.place = place;
+    public Place(String name, String city){
+        this.name = name;
         this.city = city;
     }
 
@@ -35,16 +35,16 @@ public class Place {
         this.city = city;
     }
 
-    public String getPlace() {
-        return place;
+    public String getName() {
+        return name;
     }
 
-    public void setPlace(String place) {
-        this.place = place;
+    public void setName(String place) {
+        this.name = place;
     }
 
     public String toString() {
-        return place;
+        return name;
     }
 
 }
