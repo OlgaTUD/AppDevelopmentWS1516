@@ -19,7 +19,9 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.rn.myplaces.myplaces.MainActivity;
 import com.rn.myplaces.myplaces.R;
@@ -28,6 +30,7 @@ import com.rn.myplaces.myplaces.com.rn.myplaces.database.Place;
 import com.rn.myplaces.myplaces.com.rn.myplaces.places.MyPlacesFragment;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MapViewFragment extends Fragment implements OnMapReadyCallback {
@@ -39,6 +42,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
     private ImageButton button3;
     boolean markerset;
     private MarkerOptions currentMarker = null ;
+    private ArrayList<MarkerOptions> markers;
 
     private MySQLiteHelper db;
 
@@ -52,16 +56,20 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         db = MySQLiteHelper.getInstance(getContext());
+
         View rootView = inflater.inflate(R.layout.mapview, container, false);
         MyPlacesFragment.isVisible = false;
         markerset = false;
+
         map = ((SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.location_map))
                 .getMap();
         map.setMyLocationEnabled(true);
         map.getUiSettings().setMyLocationButtonEnabled(false);
-
+        markers = new ArrayList<MarkerOptions>();
+        addMarkers();
         map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
 
             @Override
@@ -118,7 +126,13 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
                             currentMarker.title(bestMatch.getAddressLine(0));
                             String[] city = bestMatch.getAddressLine(1).split(" ");
 
-                            db.addPlace(new Place(bestMatch.getAddressLine(0), city[1]));
+                            db.addPlace(
+                                    new Place(
+                                            bestMatch.getAddressLine(0),
+                                            city[1],
+                                            String.valueOf(currentMarker.getPosition().latitude),
+                                            String.valueOf(currentMarker.getPosition().longitude)
+                                    ));
                         }
                     }
 
@@ -151,7 +165,8 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(GoogleMap map) {
-        jumpToCurLocation(map.getMyLocation());
+       // jumpToCurLocation(map.getMyLocation());
+
     }
     @Override
     public void onAttach(Activity activity) {
@@ -161,10 +176,23 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
     public void jumpToCurLocation(Location location){
 
-                    CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude()));
-                    CameraUpdate zoom = CameraUpdateFactory.zoomTo(11);
-                    map.moveCamera(center);
-                    map.animateCamera(zoom);
+        CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude()));
+        CameraUpdate zoom = CameraUpdateFactory.zoomTo(11);
+        map.moveCamera(center);
+        map.animateCamera(zoom);
+    }
+
+    public void addMarkers(){
+
+        for (Place p : db.getAllPlaces()){
+
+            LatLng coordianates = new LatLng(Double.parseDouble(p.getLat()),Double.parseDouble(p.getLong()));
+
+            Marker marker = map.addMarker(new MarkerOptions().position(coordianates)
+                    .title("Hamburg"));
+
+        }
+
     }
 
     //animation for buttons and icons

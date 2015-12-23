@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +29,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     private static final String PLACE_ID = "id";
     private static final String PLACE_NAME = "name";
     private static final String PLACE_CITY = "city";
+    private static final String PLACE_LAT = "lat";
+    private static final String PLACE_LONGTITUDE = "longtitude";
 
     public static synchronized MySQLiteHelper getInstance(Context context) {
         if (sInstance == null) {
@@ -43,9 +47,14 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     // Creating Tables
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_PLACES_TABLE = "CREATE TABLE " + TABLE_PLACES + "("
-                + PLACE_ID + " INTEGER PRIMARY KEY," + PLACE_NAME + " TEXT,"
-                + PLACE_CITY + " TEXT" + ")";
+        String CREATE_PLACES_TABLE =
+                "CREATE TABLE " + TABLE_PLACES + "("
+                + PLACE_ID + " INTEGER PRIMARY KEY,"
+                + PLACE_NAME + " TEXT,"
+                + PLACE_CITY + " TEXT,"
+                + PLACE_LAT + " TEXT,"
+                + PLACE_LONGTITUDE +" TEXT);";
+
         db.execSQL(CREATE_PLACES_TABLE);
     }
 
@@ -70,7 +79,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(PLACE_NAME, place.getName()); //
         values.put(PLACE_CITY, place.getCity()); //
-
+        values.put(PLACE_LAT,place.getLat());
+        values.put(PLACE_LONGTITUDE,place.getLong());
         // Inserting Row
         db.insert(TABLE_PLACES, null, values);
         db.close(); // Closing database connection
@@ -79,15 +89,14 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     // Getting single place
     public Place getPlace(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
-
         Cursor cursor = db.query(TABLE_PLACES, new String[] { PLACE_ID,
-                        PLACE_NAME, PLACE_CITY }, PLACE_ID + "=?",
+                        PLACE_NAME, PLACE_CITY, PLACE_LAT, PLACE_LONGTITUDE }, PLACE_ID + "=?",
                 new String[] { String.valueOf(id) }, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
 
         Place place = new Place(Integer.parseInt(cursor.getString(0)),
-                cursor.getString(1), cursor.getString(2));
+                cursor.getString(1), cursor.getString(2),cursor.getString(3),cursor.getString(4));
         // return place
         return place;
     }
@@ -108,6 +117,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 place.setId(Integer.parseInt(cursor.getString(0)));
                 place.setName(cursor.getString(1));
                 place.setCity(cursor.getString(2));
+                place.setLat(cursor.getString(3));
+                place.setLongtitude(cursor.getString(4));
                 // Adding place to list
                 placesList.add(place);
             } while (cursor.moveToNext());
@@ -124,6 +135,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(PLACE_NAME, place.getName());
         values.put(PLACE_CITY, place.getCity());
+        values.put(PLACE_LAT,place.getLat());
+        values.put(PLACE_LONGTITUDE,place.getLong());
 
         // updating row
         return db.update(TABLE_PLACES, values, PLACE_ID + " = ?",
@@ -140,7 +153,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
 
     // Getting contacts Count
-    public int getContactsCount() {
+    public int getPlacesCount() {
         String countQuery = "SELECT  * FROM " + TABLE_PLACES;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
