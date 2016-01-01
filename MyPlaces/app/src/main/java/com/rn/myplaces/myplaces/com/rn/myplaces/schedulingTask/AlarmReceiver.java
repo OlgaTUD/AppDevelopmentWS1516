@@ -3,15 +3,20 @@ package com.rn.myplaces.myplaces.com.rn.myplaces.schedulingTask;
 /**
  * Created by Uto4ko on 01.01.2016.
  */
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v4.app.NotificationCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.rn.myplaces.myplaces.MainActivity;
 import com.rn.myplaces.myplaces.R;
 import com.rn.myplaces.myplaces.weather.JSONWeatherParser;
 import com.rn.myplaces.myplaces.weather.Weather;
@@ -23,7 +28,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     String city = "London,UK";
     Weather weather;
-
+    private Context mContext;
 
     @Override
     public void onReceive(Context arg0, Intent arg1) {
@@ -32,10 +37,20 @@ public class AlarmReceiver extends BroadcastReceiver {
         JSONWeatherTask task = new JSONWeatherTask();
         task.execute(new String[]{city});
 
-        // For our recurring task, we'll just display a message
+        NotificationManager notif=(NotificationManager) arg0.getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(arg0)
+                        .setSmallIcon(R.drawable.cast_ic_notification_0)
+                        .setContentTitle("My notification")
+                        .setContentText("Hello World!");
+        int mNotificationId = 001;
+        // notif.notify(mNotificationId, mBuilder.build());
+
         //  Toast.makeText(arg0, "I'm running", Toast.LENGTH_SHORT).show();
 
     }
+
+
 
     private class JSONWeatherTask extends AsyncTask<String, Void, Weather> {
 
