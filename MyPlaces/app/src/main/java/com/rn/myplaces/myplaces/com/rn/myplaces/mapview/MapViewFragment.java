@@ -1,9 +1,12 @@
 package com.rn.myplaces.myplaces.com.rn.myplaces.mapview;
 
 import android.app.Activity;
+import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -44,6 +48,8 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
     private MarkerOptions currentMarker = null ;
     private ArrayList<MarkerOptions> markers;
 
+    private Activity act;
+
     private MySQLiteHelper db;
 
     public static MapViewFragment newInstance() {
@@ -57,6 +63,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        act = getActivity();
         db = MySQLiteHelper.getInstance(getContext());
 
         View rootView = inflater.inflate(R.layout.mapview, container, false);
@@ -106,43 +113,58 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
         button2.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
-                System.out.println("123");
-                if (markerset) {
 
-                    Geocoder geoCoder = new Geocoder(getContext());
-                    List<Address> matches = null;
-                    try {
-                        matches = geoCoder.getFromLocation(currentMarker.getPosition().latitude, currentMarker.getPosition().longitude, 1);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo wifiNetwork = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+                if (wifiNetwork != null && wifiNetwork.isConnected())
+                {
 
-                    Address bestMatch;
-                    if (matches != null) {
-                        bestMatch = (matches.isEmpty() ? null : matches.get(0));
-                        if (bestMatch != null) {
-
-                            //TODO GET CITY !!!!
-                            currentMarker.title(bestMatch.getAddressLine(0));
-                            String[] city = bestMatch.getAddressLine(1).split(" ");
-
-                            db.addPlace(
-                                    new Place(
-                                            bestMatch.getAddressLine(0),
-                                            city[1],
-                                            String.valueOf(currentMarker.getPosition().latitude),
-                                            String.valueOf(currentMarker.getPosition().longitude)
-                                    ));
+                    if (markerset) {
+                        Geocoder geoCoder = new Geocoder(getContext());
+                        List<Address> matches = null;
+                        try {
+                            matches = geoCoder.getFromLocation(currentMarker.getPosition().latitude, currentMarker.getPosition().longitude, 1);
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
+
+                        Address bestMatch;
+                        if (matches != null) {
+                            bestMatch = (matches.isEmpty() ? null : matches.get(0));
+                            if (bestMatch != null) {
+
+                                //TODO GET CITY !!!!
+                                currentMarker.title(bestMatch.getAddressLine(0));
+                                String[] city = bestMatch.getAddressLine(1).split(" ");
+
+                                db.addPlace(
+                                        new Place(
+                                                bestMatch.getAddressLine(0),
+                                                city[1],
+                                                String.valueOf(currentMarker.getPosition().latitude),
+                                                String.valueOf(currentMarker.getPosition().longitude)
+                                        ));
+                            }
+                        }
+
+
+                        // GET STREET
+                        //bestMatch.getAddressLine(0)
+
+                        //GET PLZ + CITY
+                        //bestMatch.getAddressLine(1)
+
                     }
 
+                    else {
+                        Toast.makeText(getActivity(), "Please set Marker!",
+                                Toast.LENGTH_LONG).show();
+                    }
 
-                    // GET STREET
-                    //bestMatch.getAddressLine(0)
-
-                    //GET PLZ + CITY
-                    //bestMatch.getAddressLine(1)
-
+                }
+                else{
+                    Toast.makeText(getActivity(), "No Wifi connection!",
+                            Toast.LENGTH_LONG).show();
                 }
 
             }
@@ -165,9 +187,10 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(GoogleMap map) {
-       // jumpToCurLocation(map.getMyLocation());
+        // jumpToCurLocation(map.getMyLocation());
 
     }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -202,5 +225,4 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
     }
 
 }
-
 
