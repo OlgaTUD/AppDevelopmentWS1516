@@ -1,9 +1,15 @@
 package com.rn.myplaces.myplaces.com.rn.myplaces.places;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +29,11 @@ import com.rn.myplaces.myplaces.R;
 import com.rn.myplaces.myplaces.com.rn.myplaces.database.MySQLiteHelper;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.rn.myplaces.myplaces.com.rn.myplaces.database.Place;
 
@@ -95,6 +105,10 @@ public class MyPlacesFragment extends Fragment {
               //  Intent intent = new Intent(getContext(), NewPlaceActivity.class);
               //  startActivity(intent);
 
+                ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo wifiNetwork = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+                if (wifiNetwork != null && wifiNetwork.isConnected()){
+
 
                     PlacePicker.IntentBuilder intentBuilder =
                             new PlacePicker.IntentBuilder();
@@ -109,10 +123,15 @@ public class MyPlacesFragment extends Fragment {
                 }
                 startActivityForResult(intent, PLACE_PICKER_REQUEST);
 
+
+            }
+                else{
+                    Toast.makeText(getActivity(), "No Wifi connection!",
+                            Toast.LENGTH_LONG).show();
+                }
             }
 
         });
-
 
         return rootView;
     }
@@ -125,10 +144,16 @@ public class MyPlacesFragment extends Fragment {
 
             final com.google.android.gms.location.places.Place place = PlacePicker.getPlace(data, getActivity().getApplicationContext());
 
-            final CharSequence name = place.getName();
-            final CharSequence address = place.getAddress();
+            db.addPlace(
+                    new Place(
+                            place.getName().toString(),
+                            getCityFromLatLng(place.getLatLng()),
+                            place.getAddress().toString(),
+                            String.valueOf(place.getLatLng().latitude),
+                            String.valueOf(place.getLatLng().longitude)
+                    ));
 
-            Toast.makeText(getActivity(),  place.getName(),
+            Toast.makeText(getActivity(), "Place added!",
                     Toast.LENGTH_LONG).show();
 
         } else {
@@ -146,6 +171,22 @@ public class MyPlacesFragment extends Fragment {
         Animation shake = AnimationUtils.loadAnimation(getActivity(), R.anim.raise);
         img.startAnimation(shake);
     }
+
+    public String getCityFromLatLng(LatLng coordinates){
+
+        Geocoder gcd = new Geocoder(getContext(), Locale.getDefault());
+        List<Address> addresses = null;
+        try {
+            addresses = gcd.getFromLocation(coordinates.latitude, coordinates.longitude, 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (addresses.size() > 0)
+        return addresses.get(0).getLocality();
+
+        else return "Uknown city";
+    }
+
 
 
 

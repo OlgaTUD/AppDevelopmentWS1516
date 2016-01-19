@@ -6,22 +6,25 @@ public class Place {
     private long id;
     private String name;
     private String city;
+    private String adress;
     private String lat;
     private String longtitude;
 
-    public Place(int id, String name, String city, String lat,String longtitude){
+    public Place(int id, String name, String city,String adress, String lat,String longtitude){
         this.id = id;
         this.name = name;
         this.city = city;
         this.lat = lat;
         this.longtitude = longtitude;
+        this.adress = adress;
     }
 
-    public Place(String name, String city,String lat,String longtitude){
+    public Place(String name, String city,String adress,String lat,String longtitude){
         this.name = name;
         this.city = city;
         this.lat = lat;
         this.longtitude = longtitude;
+        this.adress = adress;
     }
 
     // Empty constructor
@@ -38,6 +41,9 @@ public class Place {
     public String getCity() {
         return city;
     }
+
+    public String getAdress(){return adress;}
+    public void setAdress(String ad){ adress = ad;}
 
     public void setLat(String lat){
         this.lat = lat;

@@ -29,6 +29,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     private static final String PLACE_ID = "id";
     private static final String PLACE_NAME = "name";
     private static final String PLACE_CITY = "city";
+    private static final String PLACE_ADRESS = "adress";
     private static final String PLACE_LAT = "lat";
     private static final String PLACE_LONGTITUDE = "longtitude";
 
@@ -52,6 +53,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 + PLACE_ID + " INTEGER PRIMARY KEY,"
                 + PLACE_NAME + " TEXT,"
                 + PLACE_CITY + " TEXT,"
+                + PLACE_ADRESS + " TEXT,"
                 + PLACE_LAT + " TEXT,"
                 + PLACE_LONGTITUDE +" TEXT);";
 
@@ -79,6 +81,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(PLACE_NAME, place.getName()); //
         values.put(PLACE_CITY, place.getCity()); //
+        values.put(PLACE_ADRESS,place.getAdress());
         values.put(PLACE_LAT,place.getLat());
         values.put(PLACE_LONGTITUDE,place.getLong());
         // Inserting Row
@@ -90,13 +93,13 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     public Place getPlace(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_PLACES, new String[] { PLACE_ID,
-                        PLACE_NAME, PLACE_CITY, PLACE_LAT, PLACE_LONGTITUDE }, PLACE_ID + "=?",
+                        PLACE_NAME, PLACE_CITY, PLACE_ADRESS, PLACE_LAT, PLACE_LONGTITUDE }, PLACE_ID + "=?",
                 new String[] { String.valueOf(id) }, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
 
         Place place = new Place(Integer.parseInt(cursor.getString(0)),
-                cursor.getString(1), cursor.getString(2),cursor.getString(3),cursor.getString(4));
+                cursor.getString(1), cursor.getString(2),cursor.getString(3),cursor.getString(4),cursor.getString(5));
         // return place
         return place;
     }
@@ -117,8 +120,9 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 place.setId(Integer.parseInt(cursor.getString(0)));
                 place.setName(cursor.getString(1));
                 place.setCity(cursor.getString(2));
-                place.setLat(cursor.getString(3));
-                place.setLongtitude(cursor.getString(4));
+                place.setAdress(cursor.getString(3));
+                place.setLat(cursor.getString(4));
+                place.setLongtitude(cursor.getString(5));
                 // Adding place to list
                 placesList.add(place);
             } while (cursor.moveToNext());
@@ -135,6 +139,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(PLACE_NAME, place.getName());
         values.put(PLACE_CITY, place.getCity());
+        values.put(PLACE_ADRESS, place.getAdress());
         values.put(PLACE_LAT,place.getLat());
         values.put(PLACE_LONGTITUDE,place.getLong());
 
