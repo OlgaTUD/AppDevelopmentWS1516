@@ -133,7 +133,6 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
                             bestMatch = (matches.isEmpty() ? null : matches.get(0));
                             if (bestMatch != null) {
 
-                                //TODO GET CITY !!!!
                                 currentMarker.title(bestMatch.getAddressLine(0));
                                 String[] city = bestMatch.getAddressLine(1).split(" ");
 
@@ -144,6 +143,9 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
                                                 String.valueOf(currentMarker.getPosition().latitude),
                                                 String.valueOf(currentMarker.getPosition().longitude)
                                         ));
+
+                                Toast.makeText(getActivity(), "Place added",
+                                        Toast.LENGTH_LONG).show();
                             }
                         }
 
@@ -177,6 +179,9 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
                 for (Place p : db.getAllPlaces()){
                     db.deletePlace(p);
                 }
+
+                Toast.makeText(getActivity(), "All places removed",
+                        Toast.LENGTH_LONG).show();
 
 
             }
@@ -212,7 +217,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
             LatLng coordianates = new LatLng(Double.parseDouble(p.getLat()),Double.parseDouble(p.getLong()));
 
             Marker marker = map.addMarker(new MarkerOptions().position(coordianates)
-                    .title("Hamburg"));
+                    .title(p.getName()));
 
         }
 

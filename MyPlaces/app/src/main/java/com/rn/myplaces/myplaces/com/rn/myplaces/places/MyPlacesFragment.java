@@ -12,14 +12,20 @@ import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.rn.myplaces.myplaces.MainActivity;
 import com.rn.myplaces.myplaces.R;
 import com.rn.myplaces.myplaces.com.rn.myplaces.database.MySQLiteHelper;
-import com.rn.myplaces.myplaces.com.rn.myplaces.database.Place;
+
 
 import java.util.ArrayList;
-
+import com.google.android.gms.location.places.ui.PlacePicker;
+import com.rn.myplaces.myplaces.com.rn.myplaces.database.Place;
 
 /**
  * Created by katamarka on 04/11/15.
@@ -29,6 +35,10 @@ public class MyPlacesFragment extends Fragment {
     ImageButton FAB;
     public static boolean isVisible = false;
     private MySQLiteHelper db;
+    private static final int PLACE_PICKER_REQUEST = 1;
+
+    private static final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
+            new LatLng(37.398160, -122.180831), new LatLng(37.430610, -121.972090));
 
     public static MyPlacesFragment  newInstance() {
         MyPlacesFragment fragment = new MyPlacesFragment();
@@ -82,13 +92,48 @@ public class MyPlacesFragment extends Fragment {
 //                ft.addToBackStack(null);
 //                ft.commit();
 
-                Intent intent = new Intent(getContext(), NewPlaceActivity.class);
-                startActivity(intent);
+              //  Intent intent = new Intent(getContext(), NewPlaceActivity.class);
+              //  startActivity(intent);
+
+
+                    PlacePicker.IntentBuilder intentBuilder =
+                            new PlacePicker.IntentBuilder();
+                    intentBuilder.setLatLngBounds(BOUNDS_MOUNTAIN_VIEW);
+                    Intent intent = null;
+                try {
+                    intent = intentBuilder.build(getActivity());
+                } catch (GooglePlayServicesRepairableException e) {
+                    e.printStackTrace();
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    e.printStackTrace();
+                }
+                startActivityForResult(intent, PLACE_PICKER_REQUEST);
+
             }
+
         });
 
 
         return rootView;
+    }
+
+    public void onActivityResult(int requestCode,
+                                    int resultCode, Intent data) {
+
+        if (requestCode == PLACE_PICKER_REQUEST
+                && resultCode == Activity.RESULT_OK) {
+
+            final com.google.android.gms.location.places.Place place = PlacePicker.getPlace(data, getActivity().getApplicationContext());
+
+            final CharSequence name = place.getName();
+            final CharSequence address = place.getAddress();
+
+            Toast.makeText(getActivity(),  place.getName(),
+                    Toast.LENGTH_LONG).show();
+
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     @Override
