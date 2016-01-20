@@ -75,10 +75,10 @@ public class MyPlacesFragment extends Fragment {
                 places_count.add(1);
             }
 
-            if(places_name.contains(p.getCity()))
+            else
             {
                 int index = places_name.indexOf(p.getCity());
-                places_count.set(index,places_count.get(index)+1);
+                places_count.set(index, places_count.get(index) + 1);
             }
 
         }
@@ -144,17 +144,13 @@ public class MyPlacesFragment extends Fragment {
 
             final com.google.android.gms.location.places.Place place = PlacePicker.getPlace(data, getActivity().getApplicationContext());
 
-            db.addPlace(
-                    new Place(
-                            place.getName().toString(),
-                            getCityFromLatLng(place.getLatLng()),
-                            place.getAddress().toString(),
-                            String.valueOf(place.getLatLng().latitude),
-                            String.valueOf(place.getLatLng().longitude)
-                    ));
-
-            Toast.makeText(getActivity(), "Place added!",
-                    Toast.LENGTH_LONG).show();
+             Intent intent = new Intent(getContext(), NewPlaceActivity.class);
+             intent.putExtra("name", place.getName().toString());
+             intent.putExtra("city", getCityFromLatLng(place.getLatLng()));
+             intent.putExtra("adress", place.getAddress().toString());
+             intent.putExtra("lat",  String.valueOf(place.getLatLng().latitude));
+             intent.putExtra("long",  String.valueOf(place.getLatLng().longitude));
+             startActivity(intent);
 
         } else {
             super.onActivityResult(requestCode, resultCode, data);

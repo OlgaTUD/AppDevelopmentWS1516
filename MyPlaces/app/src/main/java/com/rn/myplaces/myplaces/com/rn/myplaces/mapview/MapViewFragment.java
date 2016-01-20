@@ -37,6 +37,7 @@ import com.rn.myplaces.myplaces.R;
 import com.rn.myplaces.myplaces.com.rn.myplaces.database.MySQLiteHelper;
 import com.rn.myplaces.myplaces.com.rn.myplaces.database.Place;
 import com.rn.myplaces.myplaces.com.rn.myplaces.places.MyPlacesFragment;
+import com.rn.myplaces.myplaces.com.rn.myplaces.places.NewPlaceActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -161,17 +162,13 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
             final com.google.android.gms.location.places.Place place = PlacePicker.getPlace(data, getActivity().getApplicationContext());
 
-            db.addPlace(
-                    new Place(
-                            place.getName().toString(),
-                            getCityFromLatLng(place.getLatLng()),
-                            place.getAddress().toString(),
-                            String.valueOf(place.getLatLng().latitude),
-                            String.valueOf(place.getLatLng().longitude)
-                    ));
-
-            Toast.makeText(getActivity(), "Place added!",
-                    Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(getContext(), NewPlaceActivity.class);
+            intent.putExtra("name", place.getName().toString());
+            intent.putExtra("city", getCityFromLatLng(place.getLatLng()));
+            intent.putExtra("adress", place.getAddress().toString());
+            intent.putExtra("lat",  String.valueOf(place.getLatLng().latitude));
+            intent.putExtra("long",  String.valueOf(place.getLatLng().longitude));
+            startActivity(intent);
 
         } else {
             super.onActivityResult(requestCode, resultCode, data);
