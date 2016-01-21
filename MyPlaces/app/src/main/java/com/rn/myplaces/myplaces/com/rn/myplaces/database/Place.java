@@ -1,7 +1,5 @@
 package com.rn.myplaces.myplaces.com.rn.myplaces.database;
 
-import com.google.android.gms.maps.model.LatLng;
-
 public class Place {
     private long id;
     private String name;
