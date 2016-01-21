@@ -28,6 +28,7 @@ import com.rn.myplaces.myplaces.weather.WeatherHttpClient;
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
@@ -57,30 +58,37 @@ public class AlarmReceiver extends BroadcastReceiver {
         // Toast.makeText(mContext, location.toString(), Toast.LENGTH_LONG).show();
 
         if(checkCoonection()){
-            if(isNear(location)){
+            List<Place> places = getNearPlaces(location);
+            if (!places.isEmpty()){
+                // System.out.println(p.getIdentifikator());
+
+                //getOpeningTimes()
                 //getWeather();
                 //pushNotification();
             }
         }
-
     }
 
-    private boolean isNear(Location current) {
+    private void getOpeningTimes(){
+        
+    }
+
+    private List<Place> getNearPlaces(Location current) {
 
         Location l2=new Location("Two");
-
-        for (Place p : db.getAllPlaces()){
+        List<Place> places = new ArrayList<>();
+        for (Place p : db.getAllPlaces()) {
             l2.setLatitude(Double.valueOf(p.getLat()));
             l2.setLongitude(Double.valueOf(p.getLong()));
             float distance_bw_one_and_two=current.distanceTo(l2);
+
             if(distance_bw_one_and_two<=2000){
-                return true;
+
+                places.add(p);
             }
+
         }
-
-
-
-        return false;
+        return places;
     }
 
     public boolean checkCoonection() {

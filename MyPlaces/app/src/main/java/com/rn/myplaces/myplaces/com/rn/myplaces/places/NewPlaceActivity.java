@@ -28,6 +28,7 @@ public class NewPlaceActivity extends AppCompatActivity {
     private String adress;
     private String lat;
     private String longt;
+    private String ident;
 
     private MySQLiteHelper db;
 
@@ -49,6 +50,7 @@ public class NewPlaceActivity extends AppCompatActivity {
         adress = myIntent.getStringExtra("adress");
         lat = myIntent.getStringExtra("lat");
         longt = myIntent.getStringExtra("long");
+        ident = myIntent.getStringExtra("ident");
 
         EditText namefield = (EditText) findViewById(R.id.name_field);
         namefield.setText(name);
@@ -85,11 +87,10 @@ public class NewPlaceActivity extends AppCompatActivity {
                             city,
                             adress,
                             lat,
-                            longt
+                            longt,
+                            ident
                     ));
 
-            Toast.makeText(this, "Place added!",
-                    Toast.LENGTH_LONG).show();
             finish();
             return true;
         }

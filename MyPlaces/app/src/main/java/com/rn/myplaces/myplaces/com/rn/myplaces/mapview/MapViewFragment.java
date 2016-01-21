@@ -168,6 +168,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
             intent.putExtra("adress", place.getAddress().toString());
             intent.putExtra("lat",  String.valueOf(place.getLatLng().latitude));
             intent.putExtra("long",  String.valueOf(place.getLatLng().longitude));
+            intent.putExtra("ident",  place.getId());
             startActivity(intent);
 
         } else {

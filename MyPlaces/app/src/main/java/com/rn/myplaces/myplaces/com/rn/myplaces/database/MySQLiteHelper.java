@@ -29,6 +29,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     private static final String PLACE_ADRESS = "adress";
     private static final String PLACE_LAT = "lat";
     private static final String PLACE_LONGTITUDE = "longtitude";
+    private static final String PLACE_IDENT = "identifikator";
 
     public static synchronized MySQLiteHelper getInstance(Context context) {
         if (sInstance == null) {
@@ -52,7 +53,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 + PLACE_CITY + " TEXT,"
                 + PLACE_ADRESS + " TEXT,"
                 + PLACE_LAT + " TEXT,"
-                + PLACE_LONGTITUDE +" TEXT);";
+                + PLACE_LONGTITUDE + " TEXT,"
+                + PLACE_IDENT +" TEXT);";
 
         db.execSQL(CREATE_PLACES_TABLE);
     }
@@ -81,6 +83,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         values.put(PLACE_ADRESS,place.getAdress());
         values.put(PLACE_LAT,place.getLat());
         values.put(PLACE_LONGTITUDE,place.getLong());
+        values.put(PLACE_IDENT,place.getIdentifikator());
         // Inserting Row
         db.insert(TABLE_PLACES, null, values);
         db.close(); // Closing database connection
@@ -90,13 +93,20 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     public Place getPlace(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_PLACES, new String[] { PLACE_ID,
-                        PLACE_NAME, PLACE_CITY, PLACE_ADRESS, PLACE_LAT, PLACE_LONGTITUDE }, PLACE_ID + "=?",
+                        PLACE_NAME, PLACE_CITY, PLACE_ADRESS, PLACE_LAT, PLACE_LONGTITUDE,PLACE_IDENT }, PLACE_ID + "=?",
                 new String[] { String.valueOf(id) }, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
 
-        Place place = new Place(Integer.parseInt(cursor.getString(0)),
-                cursor.getString(1), cursor.getString(2),cursor.getString(3),cursor.getString(4),cursor.getString(5));
+        Place place = new Place(Integer.parseInt(
+                cursor.getString(0)),
+                cursor.getString(1),
+                cursor.getString(2),
+                cursor.getString(3),
+                cursor.getString(4),
+                cursor.getString(5),
+                cursor.getString(6)
+        );
         // return place
         return place;
     }
@@ -120,6 +130,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 place.setAdress(cursor.getString(3));
                 place.setLat(cursor.getString(4));
                 place.setLongtitude(cursor.getString(5));
+                place.setIdent(cursor.getString(6));
                 // Adding place to list
                 placesList.add(place);
             } while (cursor.moveToNext());
@@ -139,6 +150,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         values.put(PLACE_ADRESS, place.getAdress());
         values.put(PLACE_LAT,place.getLat());
         values.put(PLACE_LONGTITUDE,place.getLong());
+        values.put(PLACE_IDENT,place.getIdentifikator());
 
         // updating row
         return db.update(TABLE_PLACES, values, PLACE_ID + " = ?",

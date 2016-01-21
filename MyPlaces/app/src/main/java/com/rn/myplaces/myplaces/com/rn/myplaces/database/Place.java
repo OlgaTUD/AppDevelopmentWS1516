@@ -7,22 +7,25 @@ public class Place {
     private String adress;
     private String lat;
     private String longtitude;
+    private String identifikator;
 
-    public Place(int id, String name, String city,String adress, String lat,String longtitude){
+    public Place(int id, String name, String city,String adress, String lat,String longtitude,String ident){
         this.id = id;
         this.name = name;
         this.city = city;
         this.lat = lat;
         this.longtitude = longtitude;
         this.adress = adress;
+        this.identifikator = ident;
     }
 
-    public Place(String name, String city,String adress,String lat,String longtitude){
+    public Place(String name, String city,String adress,String lat,String longtitude,String ident){
         this.name = name;
         this.city = city;
         this.lat = lat;
         this.longtitude = longtitude;
         this.adress = adress;
+        this.identifikator = ident;
     }
 
     // Empty constructor
@@ -31,6 +34,10 @@ public class Place {
     public long getId() {
         return id;
     }
+
+    public String getIdentifikator(){return identifikator;}
+
+    public void setIdent(String ident){this.identifikator = ident;}
 
     public void setId(long id) {
         this.id = id;

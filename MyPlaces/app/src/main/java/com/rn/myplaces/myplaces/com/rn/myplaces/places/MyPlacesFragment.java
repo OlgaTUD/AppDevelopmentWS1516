@@ -9,7 +9,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -150,6 +149,7 @@ public class MyPlacesFragment extends Fragment {
              intent.putExtra("adress", place.getAddress().toString());
              intent.putExtra("lat",  String.valueOf(place.getLatLng().latitude));
              intent.putExtra("long",  String.valueOf(place.getLatLng().longitude));
+             intent.putExtra("ident",  place.getId());
              startActivity(intent);
 
         } else {
