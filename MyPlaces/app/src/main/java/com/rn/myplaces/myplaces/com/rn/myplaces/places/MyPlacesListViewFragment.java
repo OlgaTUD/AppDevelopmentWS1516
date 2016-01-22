@@ -15,6 +15,8 @@ import android.widget.ListView;
 import com.rn.myplaces.myplaces.MainActivity;
 import com.rn.myplaces.myplaces.R;
 
+import java.util.ArrayList;
+
 
 /**
  * Created by katamarka on 04/11/15.
@@ -36,12 +38,22 @@ public class MyPlacesListViewFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.myplaces_listview, container, false);
         ListView listview =(ListView) rootView.findViewById(R.id.list_view_lv);
 
+        //get data from the fragment
+        Bundle bundle = this.getArguments();
+
 
         //List of Places
 
-        String[] places_name = new String[] {"Place 1", "Place 2", "Place 3", "Place 4"};
-        Integer[] places_count = new Integer[] {800, 1200, 1400, 2000};
-        Integer[] places_marker = new Integer[] {R.drawable.ic_loc_blue, R.drawable.ic_loc_green, R.drawable.ic_loc_orange, R.drawable.ic_loc_grey};
+        ArrayList<String> places_name = bundle.getStringArrayList("key");
+
+        ArrayList<Integer>  places_count = new ArrayList<Integer>();
+        ArrayList<Integer>  places_marker = new ArrayList<Integer>();
+        places_marker.add(R.drawable.ic_loc_blue);
+        places_marker.add(R.drawable.ic_loc_green);
+        places_marker.add(R.drawable.ic_loc_orange);
+        places_marker.add(R.drawable.ic_loc_grey);
+
+
 
 
         ArrayAdapter adapter =

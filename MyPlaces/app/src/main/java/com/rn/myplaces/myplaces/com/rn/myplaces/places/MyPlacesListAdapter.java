@@ -2,6 +2,7 @@ package com.rn.myplaces.myplaces.com.rn.myplaces.places;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -17,6 +18,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.rn.myplaces.myplaces.R;
+import com.rn.myplaces.myplaces.com.rn.myplaces.database.MySQLiteHelper;
+import com.rn.myplaces.myplaces.com.rn.myplaces.database.Place;
 import com.rn.myplaces.myplaces.com.rn.myplaces.mapview.MapViewFragment;
 
 import java.util.ArrayList;
@@ -28,14 +31,15 @@ import java.util.ArrayList;
 
     public class MyPlacesListAdapter extends ArrayAdapter {
 
-        private final Activity context;
+    private final Activity context;
        // public static  String[] places;
         public static ArrayList<String> places;
         private final ArrayList<Integer> place_number;
         public  FragmentManager fragmentManager;
+    private MySQLiteHelper db;
 
 
-    public MyPlacesListAdapter(Activity context,int resource, ArrayList<String> places,   ArrayList<Integer> place_number) {
+    public MyPlacesListAdapter(Activity context, int resource, ArrayList<String> places,   ArrayList<Integer> place_number) {
             super(context, R.layout.myplaces_listitem, places);
 
             this.context=context;
@@ -45,6 +49,8 @@ import java.util.ArrayList;
 
         @SuppressLint({ "ViewHolder", "InflateParams", "CutPasteId" })
         public View getView(final int position,View view,ViewGroup parent) {
+
+            db = MySQLiteHelper.getInstance(getContext());
             LayoutInflater inflater=context.getLayoutInflater();
             View rowView=inflater.inflate(R.layout.myplaces_listitem, null, true);
 
@@ -53,11 +59,24 @@ import java.util.ArrayList;
             final ImageButton mapView = (ImageButton) rowView.findViewById(R.id.icon_mapview);
             final ImageButton listView = (ImageButton) rowView.findViewById(R.id.icon_listview);
 
-
            place_name.setText(places.get(position));
            place_count.setText(place_number.get(position) + " Places");
 
            final Animation shake = AnimationUtils.loadAnimation(context, R.anim.raise);
+
+
+
+           final ArrayList<Place> city_places_obj = new ArrayList<Place>();
+
+            for (Place p : db.getAllPlaces()){
+                if (p.getCity().equals(place_name)){city_places_obj.add(p);}
+            }
+
+            final ArrayList<String> city_places = new ArrayList<String>();
+
+            for (Place object : city_places_obj) {
+                city_places.add(object.getCity() != null ? object.toString() : null);
+            }
 
 
             mapView.setOnTouchListener(new View.OnTouchListener() {
@@ -93,7 +112,6 @@ import java.util.ArrayList;
                     if (event.getAction() == MotionEvent.ACTION_UP) {
                         listViewClick();
 
-
                         return true;
                     }
 
@@ -105,7 +123,14 @@ import java.util.ArrayList;
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     v.setBackgroundColor(context.getResources().getColor(R.color.grey4));
+
+                    //passing data to the fragment
+
+                    Bundle bundle=new Bundle();
+                    bundle.putStringArrayList("key", city_places);
                     Fragment tf = MyPlacesListViewFragment.newInstance();
+                    tf.setArguments(bundle);
+
                     FragmentTransaction ft = ((FragmentActivity)getContext()).getSupportFragmentManager().beginTransaction();
                     ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                     ft.setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_FADE);

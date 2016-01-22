@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import com.rn.myplaces.myplaces.R;
 
+import java.util.ArrayList;
+
 
 /**
  * Created by katamarka on 07/11/15.
@@ -22,15 +24,15 @@ import com.rn.myplaces.myplaces.R;
     public class MyPlacesListViewAdapter extends ArrayAdapter {
 
         private final Activity context;
-        private final String[] places;
-        private final Integer[] place_distance;
-        private final Integer[] place_marker;
+        private final ArrayList<String> places;
+        private final ArrayList<Integer> place_distance;
+        private final ArrayList<Integer> place_marker;
         public  FragmentManager fragmentManager;
 
 
 
 
-    public MyPlacesListViewAdapter(Activity context, int resource, String[] places, Integer[] place_distance, Integer[] place_marker) {
+    public MyPlacesListViewAdapter(Activity context, int resource, ArrayList<String> places, ArrayList<Integer> place_distance, ArrayList<Integer> place_marker) {
             super(context, R.layout.myplaces_listitem2, places);
 
             this.context=context;
@@ -48,11 +50,12 @@ import com.rn.myplaces.myplaces.R;
             TextView place_count = (TextView) rowView.findViewById(R.id.place_distance);
             ImageView place_markers = (ImageView) rowView.findViewById(R.id.icon_marker);
 
-            place_name.setText(places[position]);
-            place_count.setText(place_distance[position] + " meter");
-            place_markers.setImageResource(place_marker[position]);
+            place_name.setText(places.get(position));
+//            place_count.setText(place_distance.get(position) + " meter");
+            place_markers.setImageResource(place_marker.get(position));
 
             final Animation shake = AnimationUtils.loadAnimation(context, R.anim.raise);
+
 
 
             return rowView;
