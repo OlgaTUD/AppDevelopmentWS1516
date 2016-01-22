@@ -15,11 +15,13 @@
     <color name="blue4">#82B1FF</color>
     <color name="blue5">#C0E0EF</color>
     <color name="marker">#EC407A</color>
+    <color name="marker2">#FF5722</color>
 
     <!-- Grey -->
     <color name="grey1">#4d4d4d</color>
     <color name="grey2">#747474</color>
     <color name="grey3">#acacac</color>
+    <color name="grey4">#40acacac</color>
 
 
 </resources>

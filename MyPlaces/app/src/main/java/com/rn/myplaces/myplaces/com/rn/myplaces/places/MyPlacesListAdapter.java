@@ -19,6 +19,8 @@ import android.widget.TextView;
 import com.rn.myplaces.myplaces.R;
 import com.rn.myplaces.myplaces.com.rn.myplaces.mapview.MapViewFragment;
 
+import java.util.ArrayList;
+
 
 /**
  * Created by katamarka on 07/11/15.
@@ -27,14 +29,13 @@ import com.rn.myplaces.myplaces.com.rn.myplaces.mapview.MapViewFragment;
     public class MyPlacesListAdapter extends ArrayAdapter {
 
         private final Activity context;
-        private final String[] places;
-        private final Integer[] place_number;
+       // public static  String[] places;
+        public static ArrayList<String> places;
+        private final ArrayList<Integer> place_number;
         public  FragmentManager fragmentManager;
 
 
-
-
-    public MyPlacesListAdapter(Activity context,int resource, String[] places,  Integer[] place_number) {
+    public MyPlacesListAdapter(Activity context,int resource, ArrayList<String> places,   ArrayList<Integer> place_number) {
             super(context, R.layout.myplaces_listitem, places);
 
             this.context=context;
@@ -47,14 +48,14 @@ import com.rn.myplaces.myplaces.com.rn.myplaces.mapview.MapViewFragment;
             LayoutInflater inflater=context.getLayoutInflater();
             View rowView=inflater.inflate(R.layout.myplaces_listitem, null, true);
 
-            TextView place_name = (TextView) rowView.findViewById(R.id.place_name);
+            final TextView place_name = (TextView) rowView.findViewById(R.id.place_name);
             TextView place_count = (TextView) rowView.findViewById(R.id.place_count);
             final ImageButton mapView = (ImageButton) rowView.findViewById(R.id.icon_mapview);
             final ImageButton listView = (ImageButton) rowView.findViewById(R.id.icon_listview);
 
 
-           place_name.setText(places[position]);
-           place_count.setText(place_number[position] + " Places");
+           place_name.setText(places.get(position));
+           place_count.setText(place_number.get(position) + " Places");
 
            final Animation shake = AnimationUtils.loadAnimation(context, R.anim.raise);
 
@@ -90,12 +91,29 @@ import com.rn.myplaces.myplaces.com.rn.myplaces.mapview.MapViewFragment;
                     }
 
                     if (event.getAction() == MotionEvent.ACTION_UP) {
+                        listViewClick();
 
 
                         return true;
                     }
 
                     return false;
+                }
+            });
+
+            rowView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    v.setBackgroundColor(context.getResources().getColor(R.color.grey4));
+                    Fragment tf = MyPlacesListViewFragment.newInstance();
+                    FragmentTransaction ft = ((FragmentActivity)getContext()).getSupportFragmentManager().beginTransaction();
+                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                    ft.setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                    ft.replace(R.id.container, tf);
+                    ft.addToBackStack(null);
+                    ft.commit();
+
+                    return(false);
                 }
             });
 
@@ -122,9 +140,16 @@ import com.rn.myplaces.myplaces.com.rn.myplaces.mapview.MapViewFragment;
         public void listViewClick() {
 //			Perform action on click
 
+            Fragment tf = new MyPlacesListViewFragment();
+            FragmentTransaction ft = ((FragmentActivity)context).getSupportFragmentManager().beginTransaction();
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            ft.setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+            ft.replace(R.id.container, tf);
+            ft.addToBackStack(null);
+            ft.commit();
+
 
         }
-
 
     }
 

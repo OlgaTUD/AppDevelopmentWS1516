@@ -6,9 +6,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.TextView;
 import com.rn.myplaces.myplaces.MainActivity;
 import com.rn.myplaces.myplaces.R;
+
+
 
 /**
  * Created by katamarka on 04/11/15.
@@ -32,8 +34,11 @@ public class ImprintFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        ((MainActivity) activity).onSectionAttached(1);
+        ((MainActivity) activity).onSectionAttached(4);
     }
+
 }
+
+
 
 

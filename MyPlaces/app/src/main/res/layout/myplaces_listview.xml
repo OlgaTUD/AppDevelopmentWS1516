@@ -10,11 +10,11 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:id="@+id/frameLayout">
+        android:id="@+id/frameLayout_lv">
 
 
         <ListView
-            android:id="@+id/list_view"
+            android:id="@+id/list_view_lv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:drawSelectorOnTop="true"/>
@@ -26,7 +26,7 @@
         android:layout_height="70dp"
         android:src="@drawable/ic_action_plus"
         android:background="@drawable/floating_button"
-        android:id="@+id/imageButton"
+        android:id="@+id/imageButton_lv"
         android:layout_gravity="right|bottom"
         android:stateListAnimator="@anim/raise" />
 
