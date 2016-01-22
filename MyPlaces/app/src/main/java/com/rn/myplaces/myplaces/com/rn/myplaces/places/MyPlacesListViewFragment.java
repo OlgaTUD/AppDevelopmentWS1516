@@ -58,7 +58,11 @@ public class MyPlacesListViewFragment extends Fragment {
 
         ArrayList<Integer>  places_count = new ArrayList<Integer>();
         ArrayList<Integer>  places_marker = new ArrayList<Integer>();
-        places_marker.add(R.drawable.ic_loc_blue);
+
+        for (int i = 0; i< place_name.length();i++){
+            places_marker.add(R.drawable.ic_loc_blue);
+        }
+       //places_marker.add(R.drawable.ic_loc_blue);
        // places_marker.add(R.drawable.ic_loc_green);
        // places_marker.add(R.drawable.ic_loc_orange);
        // places_marker.add(R.drawable.ic_loc_grey);
