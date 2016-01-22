@@ -36,7 +36,7 @@ import java.util.ArrayList;
         public static ArrayList<String> places;
         private final ArrayList<Integer> place_number;
         public  FragmentManager fragmentManager;
-    private MySQLiteHelper db;
+
 
 
     public MyPlacesListAdapter(Activity context, int resource, ArrayList<String> places,   ArrayList<Integer> place_number) {
@@ -50,7 +50,7 @@ import java.util.ArrayList;
         @SuppressLint({ "ViewHolder", "InflateParams", "CutPasteId" })
         public View getView(final int position,View view,ViewGroup parent) {
 
-            db = MySQLiteHelper.getInstance(getContext());
+
             LayoutInflater inflater=context.getLayoutInflater();
             View rowView=inflater.inflate(R.layout.myplaces_listitem, null, true);
 
@@ -68,15 +68,7 @@ import java.util.ArrayList;
 
            final ArrayList<Place> city_places_obj = new ArrayList<Place>();
 
-            for (Place p : db.getAllPlaces()){
-                if (p.getCity().equals(place_name)){city_places_obj.add(p);}
-            }
 
-            final ArrayList<String> city_places = new ArrayList<String>();
-
-            for (Place object : city_places_obj) {
-                city_places.add(object.getCity() != null ? object.toString() : null);
-            }
 
 
             mapView.setOnTouchListener(new View.OnTouchListener() {
@@ -127,7 +119,7 @@ import java.util.ArrayList;
                     //passing data to the fragment
 
                     Bundle bundle=new Bundle();
-                    bundle.putStringArrayList("key", city_places);
+                    bundle.putString("city",places.get(position));
                     Fragment tf = MyPlacesListViewFragment.newInstance();
                     tf.setArguments(bundle);
 

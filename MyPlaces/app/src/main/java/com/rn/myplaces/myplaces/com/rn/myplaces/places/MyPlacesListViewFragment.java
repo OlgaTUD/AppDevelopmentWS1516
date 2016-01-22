@@ -14,6 +14,8 @@ import android.widget.ListView;
 
 import com.rn.myplaces.myplaces.MainActivity;
 import com.rn.myplaces.myplaces.R;
+import com.rn.myplaces.myplaces.com.rn.myplaces.database.MySQLiteHelper;
+import com.rn.myplaces.myplaces.com.rn.myplaces.database.Place;
 
 import java.util.ArrayList;
 
@@ -24,6 +26,7 @@ import java.util.ArrayList;
 public class MyPlacesListViewFragment extends Fragment {
 
     ImageButton FAB2;
+    private MySQLiteHelper db;
 
     public static MyPlacesListViewFragment newInstance() {
         MyPlacesListViewFragment fragment = new MyPlacesListViewFragment();
@@ -38,20 +41,27 @@ public class MyPlacesListViewFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.myplaces_listview, container, false);
         ListView listview =(ListView) rootView.findViewById(R.id.list_view_lv);
 
-        //get data from the fragment
         Bundle bundle = this.getArguments();
+        String place_name = bundle.getString("city");
+        ArrayList<String> places_name =  new ArrayList<String>();
+        //get data from the fragment
 
+        db = MySQLiteHelper.getInstance(getContext());
+
+        for (Place p : db.getAllPlaces()){
+            if(p.getCity().equals(place_name)){
+                places_name.add(p.getName());
+            }
+        }
 
         //List of Places
-
-        ArrayList<String> places_name = bundle.getStringArrayList("key");
 
         ArrayList<Integer>  places_count = new ArrayList<Integer>();
         ArrayList<Integer>  places_marker = new ArrayList<Integer>();
         places_marker.add(R.drawable.ic_loc_blue);
-        places_marker.add(R.drawable.ic_loc_green);
-        places_marker.add(R.drawable.ic_loc_orange);
-        places_marker.add(R.drawable.ic_loc_grey);
+       // places_marker.add(R.drawable.ic_loc_green);
+       // places_marker.add(R.drawable.ic_loc_orange);
+       // places_marker.add(R.drawable.ic_loc_grey);
 
 
 

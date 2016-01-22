@@ -201,6 +201,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
         }
 
+
     }
 
     public String getCityFromLatLng(LatLng coordinates){
