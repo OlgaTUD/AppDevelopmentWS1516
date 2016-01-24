@@ -94,6 +94,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
             public void onClick(View v) {
                 animateClick(button);
+                if (map.getMyLocation()!=null)
                 jumpToCurLocation(map.getMyLocation());
             }
         });
