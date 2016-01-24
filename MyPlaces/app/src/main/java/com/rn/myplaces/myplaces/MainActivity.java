@@ -1,17 +1,12 @@
 package com.rn.myplaces.myplaces;
-
 import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.SearchManager;
-import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -19,7 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import com.rn.myplaces.myplaces.com.rn.myplaces.mapview.MapViewFragment;
 import com.rn.myplaces.myplaces.com.rn.myplaces.places.MyPlacesFragment;
 import com.rn.myplaces.myplaces.com.rn.myplaces.settings.ImprintFragment;
@@ -59,7 +53,7 @@ public class MainActivity extends AppCompatActivity
         Intent alarmIntent = new Intent(MainActivity.this, com.rn.myplaces.myplaces.com.rn.myplaces.schedulingTask.AlarmReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, alarmIntent, 0);
         AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        int interval = 8000;
+        int interval = 80000;
         manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
 
     }

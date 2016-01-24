@@ -7,29 +7,25 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
-import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.widget.Toast;
+
 
 import com.google.android.gms.maps.model.LatLng;
 import com.rn.myplaces.myplaces.R;
 import com.rn.myplaces.myplaces.com.rn.myplaces.database.MySQLiteHelper;
 import com.rn.myplaces.myplaces.com.rn.myplaces.database.Place;
-import com.rn.myplaces.myplaces.weather.GooglePlace;
-import com.rn.myplaces.myplaces.weather.JSONPlaceParser;
+import com.rn.myplaces.myplaces.com.rn.myplaces.placesAPI.GooglePlace;
+import com.rn.myplaces.myplaces.com.rn.myplaces.placesAPI.JSONPlaceParser;
 import com.rn.myplaces.myplaces.weather.JSONWeatherParser;
-import com.rn.myplaces.myplaces.weather.PlacesHttpClient;
+import com.rn.myplaces.myplaces.com.rn.myplaces.placesAPI.PlacesHttpClient;
 import com.rn.myplaces.myplaces.weather.Weather;
 import com.rn.myplaces.myplaces.weather.WeatherHttpClient;
 
@@ -43,12 +39,10 @@ import java.util.concurrent.ExecutionException;
 
 public class AlarmReceiver extends BroadcastReceiver {
 
-    String city = "London,UK";
     Weather weather;
     GooglePlace place;
     private Context mContext;
     private MySQLiteHelper db;
-
     LocationManager lm;
 
     @Override
@@ -60,7 +54,6 @@ public class AlarmReceiver extends BroadcastReceiver {
         if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Toast.makeText(mContext, "No Permission",
                     Toast.LENGTH_LONG).show();
-            return;
         }
         Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         if(location ==null){
@@ -69,26 +62,56 @@ public class AlarmReceiver extends BroadcastReceiver {
                 location = lm.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
             }
         }
-        // Toast.makeText(mContext, location.toString(), Toast.LENGTH_LONG).show();
         if (checkCoonection() && location != null) {
+
             List<Place> places = getNearPlaces(location);
             if (!places.isEmpty()) {
 
                 // Remove closed places
-                for(Place p : places){
-                    String open = getOpeningTimes(p.getIdentifikator()).getNow();
-                    if(open!=null){
-                        boolean isOpen = Boolean.parseBoolean(open);
-                        if (!isOpen)
-                            places.remove(p);
+               // checkOpeningTimes(places);
+
+                // GET PLACE TYPE AND WEATHER
+                if(!places.isEmpty()) {
+
+                    //getWeather(getCityFromLatLng(new LatLng(location.getLatitude(), location.getLongitude())));
+
+                    //String temperature = getTemperatureDescription();
+                    //boolean norain = weather.rain.getAmmount()==0.0;
+                    //boolean issnow = false;
+
+                    //System.out.println();
+                    for(Place p : places) {
+
+                        // Filter types and weather
+
                     }
                 }
-                
-                //getWeather();
+
                 //pushNotification();
 
             }
         }
+    }
+
+    private String getTemperatureDescription(){
+        double temp = weather.temperature.getTemp()-273.15;
+        if(temp <= 5) return "cold";
+        if(temp >5 && temp < 20) return "normal";
+        if(temp >20) return "hot";
+        return "unknown";
+    }
+
+    private List<Place> checkOpeningTimes(List<Place> places){
+
+        for(Place p : places){
+            String open = getOpeningTimes(p.getIdentifikator()).getNow();
+            if(open!=null){
+                boolean isOpen = Boolean.parseBoolean(open);
+                if (!isOpen)
+                    places.remove(p);
+            }
+        }
+        return places;
     }
 
     private List<Place> getNearPlaces(Location current) {
@@ -117,7 +140,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         } else return false;
     }
 
-    public String getWeather() {
+    public void getWeather(String city) {
 
         JSONWeatherTask task = new JSONWeatherTask();
         try {
@@ -127,7 +150,6 @@ public class AlarmReceiver extends BroadcastReceiver {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        return weather.currentCondition.getCondition();
     }
 
     public GooglePlace getOpeningTimes(String id) {

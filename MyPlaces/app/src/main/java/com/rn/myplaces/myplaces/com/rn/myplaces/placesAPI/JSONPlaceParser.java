@@ -1,6 +1,5 @@
-package com.rn.myplaces.myplaces.weather;
+package com.rn.myplaces.myplaces.com.rn.myplaces.placesAPI;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,8 +18,9 @@ public class JSONPlaceParser {
                 JSONObject opening = getObject("opening_hours", coordObj);
                 place.setNow(getString("open_now", opening));
             }
+            place.setPlaceId(getString("place_id",coordObj));
+            //place.setTypes();
 
-           // place.setPlaceId(getString("place_id",coordObj));
             return place;
         }
 

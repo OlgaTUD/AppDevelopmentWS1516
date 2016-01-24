@@ -1,4 +1,4 @@
-package com.rn.myplaces.myplaces.weather;
+package com.rn.myplaces.myplaces.com.rn.myplaces.placesAPI;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -26,7 +26,6 @@ public class PlacesHttpClient {
                 con.setDoOutput(true);
                 con.connect();
 
-                // Let's read the response
                 StringBuffer buffer = new StringBuffer();
                 is = con.getInputStream();
                 BufferedReader br = new BufferedReader(new InputStreamReader(is));

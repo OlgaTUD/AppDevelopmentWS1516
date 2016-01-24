@@ -1,8 +1,14 @@
 package com.rn.myplaces.myplaces.com.rn.myplaces.places;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +17,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.rn.myplaces.myplaces.R;
 
@@ -28,8 +35,6 @@ import java.util.ArrayList;
         private final ArrayList<Integer> place_distance;
         private final ArrayList<Integer> place_marker;
         public  FragmentManager fragmentManager;
-
-
 
 
     public MyPlacesListViewAdapter(Activity context, int resource, ArrayList<String> places, ArrayList<Integer> place_distance, ArrayList<Integer> place_marker) {
@@ -51,12 +56,10 @@ import java.util.ArrayList;
             ImageView place_markers = (ImageView) rowView.findViewById(R.id.icon_marker);
 
             place_name.setText(places.get(position));
-//            place_count.setText(place_distance.get(position) + " meter");
+            place_count.setText(place_distance.get(position) + " meter");
             place_markers.setImageResource(place_marker.get(position));
 
             final Animation shake = AnimationUtils.loadAnimation(context, R.anim.raise);
-
-
 
             return rowView;
         };

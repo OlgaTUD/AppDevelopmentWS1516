@@ -11,8 +11,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
-
 import com.rn.myplaces.myplaces.R;
 import com.rn.myplaces.myplaces.com.rn.myplaces.database.MySQLiteHelper;
 import com.rn.myplaces.myplaces.com.rn.myplaces.database.Place;
