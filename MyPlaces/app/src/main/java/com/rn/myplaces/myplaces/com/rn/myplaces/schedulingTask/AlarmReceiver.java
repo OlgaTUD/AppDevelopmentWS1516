@@ -48,6 +48,8 @@ public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context arg0, Intent arg1) {
 
+        System.out.println("Alarm");
+
         mContext = arg0;
         db = MySQLiteHelper.getInstance(mContext);
         lm = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
@@ -67,27 +69,72 @@ public class AlarmReceiver extends BroadcastReceiver {
             List<Place> places = getNearPlaces(location);
             if (!places.isEmpty()) {
 
+                List<GooglePlace> gplaces = placeToGooglePlaceConverter(places);
+
                 // Remove closed places
-               // checkOpeningTimes(places);
+                for (GooglePlace p : gplaces){
+                    if (p.getNow().equals("false")){
+                        gplaces.remove(p);
+                    }
+                }
 
                 // GET PLACE TYPE AND WEATHER
-                if(!places.isEmpty()) {
+                if(!gplaces.isEmpty()) {
 
-                    //getWeather(getCityFromLatLng(new LatLng(location.getLatitude(), location.getLongitude())));
+                   String city =  getCityFromLatLng(new LatLng(location.getLatitude(), location.getLongitude()));
+                   getWeather(city);
 
-                    //String temperature = getTemperatureDescription();
-                    //boolean norain = weather.rain.getAmmount()==0.0;
-                    //boolean issnow = false;
+                   // cold , hot, normal
+                   String temperature = getTemperatureDescription();
+                   boolean noRain = weather.rain.getAmmount()==0.0;
+                   boolean noSnow = weather.snow.getAmmount()==0.0;
 
-                    //System.out.println();
-                    for(Place p : places) {
-
+                    //System.out.println(noRain);
+                    for(GooglePlace p : gplaces) {
                         // Filter types and weather
+                        if (!noRain){
+                            //Remove places types not used for rain
+                            if (p.getTypes().contains("amusement_park") ||
+                                    p.getTypes().contains("park") ||
+                                    p.getTypes().contains("stadium") ||
+                                    p.getTypes().contains("amusement_park")
+                                    ){
+                                gplaces.remove(p);
+                            }
+                        }
+
+                        if (!noSnow){
+                            //Remove places types not used for rain
+                            if (p.getTypes().contains("")){
+                                gplaces.remove(p);
+                            }
+
+                        }
+
+                        if (temperature.equals("cold")){
+                            //Remove places types not used for cold weather
+                            if (p.getTypes().contains("")){
+                                gplaces.remove(p);
+                            }
+                        }
+
+                        if (temperature.equals("hot")){
+                            //Remove places types not used for warm weather
+                            if (p.getTypes().contains("")){
+                                gplaces.remove(p);
+                            }
+                        }
+
+                        if (temperature.equals("normal")){
+                            if (p.getTypes().contains("")){
+                                gplaces.remove(p);
+                            }
+                        }
 
                     }
                 }
 
-                //pushNotification();
+                pushNotification(gplaces);
 
             }
         }
@@ -101,17 +148,15 @@ public class AlarmReceiver extends BroadcastReceiver {
         return "unknown";
     }
 
-    private List<Place> checkOpeningTimes(List<Place> places){
+    private List<GooglePlace> placeToGooglePlaceConverter(List<Place> places){
+
+        List<GooglePlace> gplaces = new ArrayList<>();
 
         for(Place p : places){
-            String open = getOpeningTimes(p.getIdentifikator()).getNow();
-            if(open!=null){
-                boolean isOpen = Boolean.parseBoolean(open);
-                if (!isOpen)
-                    places.remove(p);
-            }
+            GooglePlace newp = getGooglePlace(p.getIdentifikator());
+            gplaces.add(newp);
         }
-        return places;
+            return gplaces;
     }
 
     private List<Place> getNearPlaces(Location current) {
@@ -152,7 +197,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         }
     }
 
-    public GooglePlace getOpeningTimes(String id) {
+    public GooglePlace getGooglePlace(String id) {
 
         JSONOpenTask task = new JSONOpenTask();
         try {
@@ -165,17 +210,33 @@ public class AlarmReceiver extends BroadcastReceiver {
         return place;
     }
 
-    public void pushNotification() {
+    public void pushNotification(List<GooglePlace> places) {
 
-        NotificationManager notif = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(mContext)
-                        .setSmallIcon(R.drawable.cast_ic_notification_0)
-                        .setContentTitle("Your Places")
-                        .setContentText("Hello World!");
-        int mNotificationId = 001;
-        notif.notify(mNotificationId, mBuilder.build());
+        String text ="Would you like to visit ";
 
+            for (GooglePlace g : places){
+               System.out.println(g.getPlaceId());
+                String gid = g.getPlaceId();
+
+                for (Place p : db.getAllPlaces()) {
+                    System.out.println(p.getIdentifikator());
+                    if (gid.equals(p.getIdentifikator())){
+                        System.out.println(p.getName());
+                        text = text + p.getName();
+                }
+            }
+            text = text + ".";
+            System.out.println(text);
+
+            NotificationManager notif = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationCompat.Builder mBuilder =
+                    new NotificationCompat.Builder(mContext)
+                            .setSmallIcon(R.drawable.cast_ic_notification_0)
+                            .setContentTitle("Your Places")
+                            .setContentText(text);
+            int mNotificationId = 001;
+            notif.notify(mNotificationId, mBuilder.build());
+        }
     }
 
     public String getCityFromLatLng(LatLng coordinates) {

@@ -1,7 +1,13 @@
 package com.rn.myplaces.myplaces.com.rn.myplaces.placesAPI;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Uto4ko on 23.01.2016.
@@ -18,8 +24,13 @@ public class JSONPlaceParser {
                 JSONObject opening = getObject("opening_hours", coordObj);
                 place.setNow(getString("open_now", opening));
             }
-            place.setPlaceId(getString("place_id",coordObj));
-            //place.setTypes();
+            place.setPlaceId(getString("place_id", coordObj));
+
+            String types = getString("types", coordObj);
+            types = types.substring(1,types.length()-1);
+            String[] typesarray = types.split(",");
+            ArrayList typeslist = new ArrayList(Arrays.asList(typesarray));
+            place.setTypes(typeslist);
 
             return place;
         }
