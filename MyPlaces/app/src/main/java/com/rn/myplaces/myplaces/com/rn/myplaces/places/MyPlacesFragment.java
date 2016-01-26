@@ -36,9 +36,6 @@ import java.util.Locale;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.rn.myplaces.myplaces.com.rn.myplaces.database.Place;
 
-/**
- * Created by katamarka on 04/11/15.
- */
 public class MyPlacesFragment extends Fragment {
 
     ImageButton FAB;
@@ -93,16 +90,6 @@ public class MyPlacesFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 animateClick(FAB);
-//                Fragment tf = NewPlaceFragment.newInstance();
-//                FragmentTransaction ft = ((FragmentActivity) getContext()).getSupportFragmentManager().beginTransaction();
-//                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-//                ft.setTransitionStyle(FragmentTransaction.TRANSIT_NONE);
-//                ft.replace(R.id.container, tf);
-//                ft.addToBackStack(null);
-//                ft.commit();
-
-              //  Intent intent = new Intent(getContext(), NewPlaceActivity.class);
-              //  startActivity(intent);
 
                 ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo wifiNetwork = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);

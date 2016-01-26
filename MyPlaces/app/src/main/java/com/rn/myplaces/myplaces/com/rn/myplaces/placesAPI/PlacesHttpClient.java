@@ -6,9 +6,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-/**
- * Created by Uto4ko on 23.01.2016.
- */
 public class PlacesHttpClient {
 
         private static String BASE_URL = "https://maps.googleapis.com/maps/api/place/details/json?placeid=";
@@ -30,14 +27,11 @@ public class PlacesHttpClient {
                 BufferedReader br = new BufferedReader(new InputStreamReader(is));
                 String line = null;
                 while (  (line = br.readLine()) != null ){
-                   // System.out.println(line);
                     buffer.append(line + "\r\n");
                 }
 
                 is.close();
                 con.disconnect();
-                //System.out.println("123");
-                //System.out.println(buffer.toString());
                 return buffer.toString();
             }
             catch(Throwable t) {

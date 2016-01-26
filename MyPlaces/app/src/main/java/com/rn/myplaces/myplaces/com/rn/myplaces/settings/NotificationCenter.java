@@ -49,9 +49,7 @@ public class NotificationCenter extends Fragment {
                 }
             }
         }
-
-        num = db2.getAllNotifications().size();
-
+        
         List<Notification> list = db2.getAllNotifications();
 
         switch (list.size()) {

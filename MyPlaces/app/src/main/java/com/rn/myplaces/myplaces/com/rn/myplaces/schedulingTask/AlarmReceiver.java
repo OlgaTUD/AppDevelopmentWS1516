@@ -251,7 +251,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         NotificationManager notif = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(mContext)
-                        .setSmallIcon(R.drawable.cast_ic_notification_0)
+                        .setSmallIcon(R.drawable.ic_action_map)
                         .setContentTitle("Your Places")
                         .setContentText(text);
         int mNotificationId = 001;

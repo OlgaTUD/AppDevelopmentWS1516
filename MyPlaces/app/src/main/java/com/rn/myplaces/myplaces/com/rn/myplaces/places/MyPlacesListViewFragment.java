@@ -13,7 +13,6 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -42,10 +41,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-
-/**
- * Created by katamarka on 04/11/15.
- */
 public class MyPlacesListViewFragment extends Fragment implements LocationListener {
 
     ImageButton FAB2;
@@ -77,21 +72,15 @@ public class MyPlacesListViewFragment extends Fragment implements LocationListen
         }
         Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         if (location != null && location.getTime() > Calendar.getInstance().getTimeInMillis() - 2 * 60 * 1000) {
-            //location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-            // if (location == null){
-            //     location = lm.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
-            // }
 
         }
         if (location == null || location.getTime() < Calendar.getInstance().getTimeInMillis() - 2 * 60 * 1000) {
             lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
         }
 
-
         Bundle bundle = this.getArguments();
         String place_name = bundle.getString("city");
         ArrayList<String> places_name = new ArrayList<String>();
-        //get data from the fragment
 
         db = MySQLiteHelper.getInstance(getContext());
 
@@ -102,7 +91,6 @@ public class MyPlacesListViewFragment extends Fragment implements LocationListen
         }
 
         //List of Places
-
         ArrayList<Integer> places_distance = new ArrayList<Integer>();
         for (Place p : db.getAllPlaces()) {
             if (p.getCity().equals(place_name)) {
@@ -119,17 +107,10 @@ public class MyPlacesListViewFragment extends Fragment implements LocationListen
         for (int i = 0; i < place_name.length(); i++) {
             places_marker.add(R.drawable.ic_loc_blue);
         }
-        //places_marker.add(R.drawable.ic_loc_blue);
-        // places_marker.add(R.drawable.ic_loc_green);
-        // places_marker.add(R.drawable.ic_loc_orange);
-        // places_marker.add(R.drawable.ic_loc_grey);
-
 
         ArrayAdapter adapter =
                 new MyPlacesListViewAdapter(getActivity(), R.layout.myplaces_listitem2, places_name, places_distance, places_marker);
         listview.setAdapter(adapter);
-
-        //Round button
 
         FAB2 = (ImageButton) rootView.findViewById(R.id.imageButton_lv);
         FAB2.setOnClickListener(new View.OnClickListener() {
@@ -140,7 +121,6 @@ public class MyPlacesListViewFragment extends Fragment implements LocationListen
                 ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo wifiNetwork = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
                 if (wifiNetwork != null && wifiNetwork.isConnected()){
-
 
                     PlacePicker.IntentBuilder intentBuilder =
                             new PlacePicker.IntentBuilder();
@@ -155,13 +135,11 @@ public class MyPlacesListViewFragment extends Fragment implements LocationListen
                     }
                     startActivityForResult(intent, PLACE_PICKER_REQUEST);
 
-
                 }
                 else{
                     Toast.makeText(getActivity(), "No Wifi connection!",
                             Toast.LENGTH_LONG).show();
                 }
-
             }
         });
 
@@ -191,7 +169,6 @@ public class MyPlacesListViewFragment extends Fragment implements LocationListen
         }
     }
 
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -218,20 +195,11 @@ public class MyPlacesListViewFragment extends Fragment implements LocationListen
     }
 
     @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
+    public void onStatusChanged(String provider, int status, Bundle extras) {}
     @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
+    public void onProviderEnabled(String provider) {}
     @Override
-    public void onProviderDisabled(String provider) {
-
-    }
-
+    public void onProviderDisabled(String provider) {}
 
     public String getCityFromLatLng(LatLng coordinates){
 

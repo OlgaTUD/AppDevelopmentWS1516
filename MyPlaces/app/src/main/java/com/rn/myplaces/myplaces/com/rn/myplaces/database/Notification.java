@@ -1,8 +1,5 @@
 package com.rn.myplaces.myplaces.com.rn.myplaces.database;
 
-/**
- * Created by Uto4ko on 26.01.2016.
- */
 public class Notification {
 
     private int id;

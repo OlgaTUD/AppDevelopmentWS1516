@@ -15,9 +15,6 @@ import com.rn.myplaces.myplaces.R;
 import com.rn.myplaces.myplaces.com.rn.myplaces.database.MySQLiteHelper;
 import com.rn.myplaces.myplaces.com.rn.myplaces.database.Place;
 
-/**
- * Created by helgafoxx on 17.11.15.
- */
 public class NewPlaceActivity extends AppCompatActivity {
 
     private ActionBar toolbar;
@@ -60,16 +57,12 @@ public class NewPlaceActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.new_place, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         if (id == R.id.home) {
@@ -93,7 +86,6 @@ public class NewPlaceActivity extends AppCompatActivity {
             return true;
         }
 
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -109,8 +101,6 @@ public class NewPlaceActivity extends AppCompatActivity {
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle("My Places");
     }
-
-
 
     public void animateClick(ImageButton img){
         Animation shake = AnimationUtils.loadAnimation(this, R.anim.raise);

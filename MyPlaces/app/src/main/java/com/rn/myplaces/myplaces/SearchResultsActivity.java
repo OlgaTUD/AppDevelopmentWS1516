@@ -5,9 +5,6 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 
-/**
- * Created by katamarka on 23/11/15.
- */
 public class SearchResultsActivity extends Activity {
 
     @Override

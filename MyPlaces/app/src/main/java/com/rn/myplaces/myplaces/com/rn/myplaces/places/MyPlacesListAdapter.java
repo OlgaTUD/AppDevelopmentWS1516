@@ -24,24 +24,15 @@ import com.rn.myplaces.myplaces.com.rn.myplaces.mapview.MapViewFragment;
 
 import java.util.ArrayList;
 
-
-/**
- * Created by katamarka on 07/11/15.
- */
-
     public class MyPlacesListAdapter extends ArrayAdapter {
 
     private final Activity context;
-       // public static  String[] places;
         public static ArrayList<String> places;
         private final ArrayList<Integer> place_number;
         public  FragmentManager fragmentManager;
 
-
-
     public MyPlacesListAdapter(Activity context, int resource, ArrayList<String> places,   ArrayList<Integer> place_number) {
             super(context, R.layout.myplaces_listitem, places);
-
             this.context=context;
             this.place_number = place_number;
             this.places = places;
@@ -49,7 +40,6 @@ import java.util.ArrayList;
 
         @SuppressLint({ "ViewHolder", "InflateParams", "CutPasteId" })
         public View getView(final int position,View view,ViewGroup parent) {
-
 
             LayoutInflater inflater=context.getLayoutInflater();
             View rowView=inflater.inflate(R.layout.myplaces_listitem, null, true);
@@ -59,17 +49,11 @@ import java.util.ArrayList;
             final ImageButton mapView = (ImageButton) rowView.findViewById(R.id.icon_mapview);
             final ImageButton listView = (ImageButton) rowView.findViewById(R.id.icon_listview);
 
-           place_name.setText(places.get(position));
-           place_count.setText(place_number.get(position) + " Places");
+            place_name.setText(places.get(position));
+            place_count.setText(place_number.get(position) + " Places");
 
-           final Animation shake = AnimationUtils.loadAnimation(context, R.anim.raise);
-
-
-
-           final ArrayList<Place> city_places_obj = new ArrayList<Place>();
-
-
-
+            final Animation shake = AnimationUtils.loadAnimation(context, R.anim.raise);
+            final ArrayList<Place> city_places_obj = new ArrayList<Place>();
 
             mapView.setOnTouchListener(new View.OnTouchListener() {
 
@@ -77,16 +61,13 @@ import java.util.ArrayList;
                 public boolean onTouch(View v, MotionEvent event) {
                     if (event.getAction() == MotionEvent.ACTION_DOWN) {
                         mapView.startAnimation(shake);
-
                         return true;
                     }
 
                     if (event.getAction() == MotionEvent.ACTION_UP) {
                         mapViewClick();
-
                         return true;
                     }
-
                     return false;
                 }
             });
@@ -97,16 +78,13 @@ import java.util.ArrayList;
                 public boolean onTouch(View v, MotionEvent event) {
                     if (event.getAction() == MotionEvent.ACTION_DOWN) {
                         listView.startAnimation(shake);
-
                         return true;
                     }
 
                     if (event.getAction() == MotionEvent.ACTION_UP) {
                         listViewClick();
-
                         return true;
                     }
-
                     return false;
                 }
             });
@@ -117,7 +95,6 @@ import java.util.ArrayList;
                     v.setBackgroundColor(context.getResources().getColor(R.color.grey4));
 
                     //passing data to the fragment
-
                     Bundle bundle=new Bundle();
                     bundle.putString("city",places.get(position));
                     Fragment tf = MyPlacesListViewFragment.newInstance();
@@ -139,9 +116,8 @@ import java.util.ArrayList;
         };
 
 
-        //		"MapView" button clicked
+        //"MapView" button clicked
         public void mapViewClick() {
-//			Perform action on click
 
             Fragment tf = new MapViewFragment();
             FragmentTransaction ft = ((FragmentActivity)context).getSupportFragmentManager().beginTransaction();
@@ -150,12 +126,10 @@ import java.util.ArrayList;
             ft.replace(R.id.container, tf);
             ft.addToBackStack(null);
             ft.commit();
-
         }
 
         //		"ListView" button clicked
         public void listViewClick() {
-//			Perform action on click
 
             Fragment tf = new MyPlacesListViewFragment();
             FragmentTransaction ft = ((FragmentActivity)context).getSupportFragmentManager().beginTransaction();
@@ -164,8 +138,6 @@ import java.util.ArrayList;
             ft.replace(R.id.container, tf);
             ft.addToBackStack(null);
             ft.commit();
-
-
         }
 
     }

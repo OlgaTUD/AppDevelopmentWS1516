@@ -3,9 +3,6 @@ package com.rn.myplaces.myplaces.com.rn.myplaces.placesAPI;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-/**
- * Created by Uto4ko on 23.01.2016.
- */
 public class GooglePlace  implements Serializable {
 
     private String placeid;

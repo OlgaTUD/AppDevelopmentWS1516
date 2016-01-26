@@ -12,12 +12,7 @@ import com.rn.myplaces.myplaces.R;
 import com.rn.myplaces.myplaces.com.rn.myplaces.database.Notification;
 import com.rn.myplaces.myplaces.com.rn.myplaces.database.NotificationHelper;
 
-
-/**
- * Created by katamarka on 04/11/15.
- */
 public class ImprintFragment extends Fragment {
-
 
     public static ImprintFragment newInstance() {
         ImprintFragment fragment = new ImprintFragment();

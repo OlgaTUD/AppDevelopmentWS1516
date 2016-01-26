@@ -126,15 +126,4 @@ public class NotificationHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-
-    // Getting contacts Count
-    public int getNotificationsCount() {
-        String countQuery = "SELECT  * FROM " + TABLE_NOTIFICATIONS;
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(countQuery, null);
-        cursor.close();
-
-        // return count
-        return cursor.getCount();
-    }
 }

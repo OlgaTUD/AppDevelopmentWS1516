@@ -1,14 +1,8 @@
 package com.rn.myplaces.myplaces.com.rn.myplaces.places;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationManager;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,16 +11,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.rn.myplaces.myplaces.R;
-
 import java.util.ArrayList;
-
-
-/**
- * Created by katamarka on 07/11/15.
- */
 
     public class MyPlacesListViewAdapter extends ArrayAdapter {
 
@@ -60,12 +46,8 @@ import java.util.ArrayList;
             place_markers.setImageResource(place_marker.get(position));
 
             final Animation shake = AnimationUtils.loadAnimation(context, R.anim.raise);
-
             return rowView;
         };
-
-
-
     }
 
 

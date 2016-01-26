@@ -1,23 +1,15 @@
 package com.rn.myplaces.myplaces.com.rn.myplaces.placesAPI;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
-/**
- * Created by Uto4ko on 23.01.2016.
- */
 public class JSONPlaceParser {
 
         public static GooglePlace getPlace(String data) throws JSONException {
             GooglePlace place = new GooglePlace();
 
-            // We create out JSONObject from the data
             JSONObject jObj = new JSONObject(data);
             JSONObject coordObj = getObject("result", jObj);
             if(coordObj.has("opening_hours")){
