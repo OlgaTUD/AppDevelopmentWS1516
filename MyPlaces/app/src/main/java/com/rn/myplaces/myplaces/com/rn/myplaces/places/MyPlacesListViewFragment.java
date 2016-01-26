@@ -5,8 +5,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -25,12 +27,13 @@ import com.rn.myplaces.myplaces.com.rn.myplaces.database.MySQLiteHelper;
 import com.rn.myplaces.myplaces.com.rn.myplaces.database.Place;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 
 /**
  * Created by katamarka on 04/11/15.
  */
-public class MyPlacesListViewFragment extends Fragment {
+public class MyPlacesListViewFragment extends Fragment implements LocationListener {
 
     ImageButton FAB2;
     private MySQLiteHelper db;
@@ -47,7 +50,7 @@ public class MyPlacesListViewFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.myplaces_listview, container, false);
-        ListView listview =(ListView) rootView.findViewById(R.id.list_view_lv);
+        ListView listview = (ListView) rootView.findViewById(R.id.list_view_lv);
 
         lm = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -55,50 +58,53 @@ public class MyPlacesListViewFragment extends Fragment {
                     Toast.LENGTH_LONG).show();
         }
         Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        if(location ==null){
-            location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-            if (location == null){
-                location = lm.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
-            }
-        }
+        if (location != null && location.getTime() > Calendar.getInstance().getTimeInMillis() - 2 * 60 * 1000) {
+            //location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            // if (location == null){
+            //     location = lm.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+            // }
 
+        }
+        if (location == null || location.getTime() < Calendar.getInstance().getTimeInMillis() - 2 * 60 * 1000) {
+            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        }
 
 
         Bundle bundle = this.getArguments();
         String place_name = bundle.getString("city");
-        ArrayList<String> places_name =  new ArrayList<String>();
+        ArrayList<String> places_name = new ArrayList<String>();
         //get data from the fragment
 
         db = MySQLiteHelper.getInstance(getContext());
 
-        for (Place p : db.getAllPlaces()){
-            if(p.getCity().equals(place_name)){
+        for (Place p : db.getAllPlaces()) {
+            if (p.getCity().equals(place_name)) {
                 places_name.add(p.getName());
             }
         }
 
         //List of Places
 
-        ArrayList<Integer>  places_distance = new ArrayList<Integer>();
-        for (Place p : db.getAllPlaces()){
-            if(p.getCity().equals(place_name)){
+        ArrayList<Integer> places_distance = new ArrayList<Integer>();
+        for (Place p : db.getAllPlaces()) {
+            if (p.getCity().equals(place_name)) {
                 Location loc = new Location("loc");
                 loc.setLatitude(Double.valueOf(p.getLat()));
                 loc.setLongitude(Double.valueOf(p.getLong()));
-                places_distance.add((int) getDistance(loc,location));
+                places_distance.add((int) getDistance(loc, location));
             }
         }
 
 
-        ArrayList<Integer>  places_marker = new ArrayList<Integer>();
+        ArrayList<Integer> places_marker = new ArrayList<Integer>();
 
-        for (int i = 0; i< place_name.length();i++){
+        for (int i = 0; i < place_name.length(); i++) {
             places_marker.add(R.drawable.ic_loc_blue);
         }
-       //places_marker.add(R.drawable.ic_loc_blue);
-       // places_marker.add(R.drawable.ic_loc_green);
-       // places_marker.add(R.drawable.ic_loc_orange);
-       // places_marker.add(R.drawable.ic_loc_grey);
+        //places_marker.add(R.drawable.ic_loc_blue);
+        // places_marker.add(R.drawable.ic_loc_green);
+        // places_marker.add(R.drawable.ic_loc_orange);
+        // places_marker.add(R.drawable.ic_loc_grey);
 
 
         ArrayAdapter adapter =
@@ -124,13 +130,38 @@ public class MyPlacesListViewFragment extends Fragment {
         ((MainActivity) activity).onSectionAttached(5);
     }
 
-    public void animateClick(ImageButton img){
+    public void animateClick(ImageButton img) {
         Animation shake = AnimationUtils.loadAnimation(getActivity(), R.anim.raise);
         img.startAnimation(shake);
     }
 
-    public float getDistance(Location loc,Location location){
+    public float getDistance(Location loc, Location location) {
         return location.distanceTo(loc);
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        if (location != null) {
+            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            lm.removeUpdates(this);
+        }
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
     }
 }
 

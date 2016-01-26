@@ -73,8 +73,10 @@ public class AlarmReceiver extends BroadcastReceiver {
 
                 // Remove closed places
                 for (GooglePlace p : gplaces){
-                    if (p.getNow().equals("false")){
-                        gplaces.remove(p);
+                    if(p.getNow()!=null) {
+                        if (p.getNow().equals("false")) {
+                            gplaces.remove(p);
+                        }
                     }
                 }
 
@@ -215,13 +217,10 @@ public class AlarmReceiver extends BroadcastReceiver {
         String text ="Would you like to visit ";
 
             for (GooglePlace g : places){
-               System.out.println(g.getPlaceId());
                 String gid = g.getPlaceId();
-
                 for (Place p : db.getAllPlaces()) {
                     System.out.println(p.getIdentifikator());
                     if (gid.equals(p.getIdentifikator())){
-                        System.out.println(p.getName());
                         text = text + p.getName();
                 }
             }
