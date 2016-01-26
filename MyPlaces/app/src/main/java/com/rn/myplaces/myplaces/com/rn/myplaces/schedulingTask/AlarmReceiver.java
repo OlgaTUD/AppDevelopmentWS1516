@@ -21,6 +21,8 @@ import android.widget.Toast;
 import com.google.android.gms.maps.model.LatLng;
 import com.rn.myplaces.myplaces.R;
 import com.rn.myplaces.myplaces.com.rn.myplaces.database.MySQLiteHelper;
+import com.rn.myplaces.myplaces.com.rn.myplaces.database.Notification;
+import com.rn.myplaces.myplaces.com.rn.myplaces.database.NotificationHelper;
 import com.rn.myplaces.myplaces.com.rn.myplaces.database.Place;
 import com.rn.myplaces.myplaces.com.rn.myplaces.placesAPI.GooglePlace;
 import com.rn.myplaces.myplaces.com.rn.myplaces.placesAPI.JSONPlaceParser;
@@ -43,6 +45,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     GooglePlace place;
     private Context mContext;
     private MySQLiteHelper db;
+    private NotificationHelper db2;
     LocationManager lm;
 
     @Override
@@ -214,18 +217,21 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     public void pushNotification(List<GooglePlace> places) {
 
+        db2 = NotificationHelper.getInstance(mContext);
+
         String text ="Would you like to visit ";
 
             for (GooglePlace g : places){
                 String gid = g.getPlaceId();
                 for (Place p : db.getAllPlaces()) {
-                    System.out.println(p.getIdentifikator());
                     if (gid.equals(p.getIdentifikator())){
                         text = text + p.getName();
                 }
             }
             text = text + ".";
-            System.out.println(text);
+            //System.out.println(text)
+            Notification n = new Notification(text);
+            db2.addNotification(n);
 
             NotificationManager notif = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
             NotificationCompat.Builder mBuilder =
