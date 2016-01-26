@@ -57,7 +57,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
     private static final int PLACE_PICKER_REQUEST = 1;
 
     private static final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
-            new LatLng(37.398160, -122.180831), new LatLng(37.430610, -121.972090));
+            new LatLng(51.0297723, 13.7247851), new LatLng(51.0650247, 13.7880782));
 
     private Activity act;
 

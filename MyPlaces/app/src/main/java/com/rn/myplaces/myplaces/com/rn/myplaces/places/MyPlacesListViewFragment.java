@@ -3,10 +3,15 @@ package com.rn.myplaces.myplaces.com.rn.myplaces.places;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -21,13 +26,21 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.rn.myplaces.myplaces.MainActivity;
 import com.rn.myplaces.myplaces.R;
 import com.rn.myplaces.myplaces.com.rn.myplaces.database.MySQLiteHelper;
 import com.rn.myplaces.myplaces.com.rn.myplaces.database.Place;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -38,6 +51,11 @@ public class MyPlacesListViewFragment extends Fragment implements LocationListen
     ImageButton FAB2;
     private MySQLiteHelper db;
     LocationManager lm;
+    private static final int PLACE_PICKER_REQUEST = 1;
+
+    private static final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
+            new LatLng(51.0297723, 13.7247851), new LatLng(51.0650247, 13.7880782));
+
 
     public static MyPlacesListViewFragment newInstance() {
         MyPlacesListViewFragment fragment = new MyPlacesListViewFragment();
@@ -118,11 +136,61 @@ public class MyPlacesListViewFragment extends Fragment implements LocationListen
             @Override
             public void onClick(View v) {
                 animateClick(FAB2);
+
+                ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo wifiNetwork = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+                if (wifiNetwork != null && wifiNetwork.isConnected()){
+
+
+                    PlacePicker.IntentBuilder intentBuilder =
+                            new PlacePicker.IntentBuilder();
+                    intentBuilder.setLatLngBounds(BOUNDS_MOUNTAIN_VIEW);
+                    Intent intent = null;
+                    try {
+                        intent = intentBuilder.build(getActivity());
+                    } catch (GooglePlayServicesRepairableException e) {
+                        e.printStackTrace();
+                    } catch (GooglePlayServicesNotAvailableException e) {
+                        e.printStackTrace();
+                    }
+                    startActivityForResult(intent, PLACE_PICKER_REQUEST);
+
+
+                }
+                else{
+                    Toast.makeText(getActivity(), "No Wifi connection!",
+                            Toast.LENGTH_LONG).show();
+                }
+
             }
         });
 
         return rootView;
     }
+
+
+    public void onActivityResult(int requestCode,
+                                 int resultCode, Intent data) {
+
+        if (requestCode == PLACE_PICKER_REQUEST
+                && resultCode == Activity.RESULT_OK) {
+
+            final com.google.android.gms.location.places.Place place = PlacePicker.getPlace(data, getActivity().getApplicationContext());
+
+            Intent intent = new Intent(getContext(), NewPlaceActivity.class);
+            intent.putExtra("name", place.getName().toString());
+            intent.putExtra("city", getCityFromLatLng(place.getLatLng()));
+            intent.putExtra("adress", place.getAddress().toString());
+            intent.putExtra("lat",  String.valueOf(place.getLatLng().latitude));
+            intent.putExtra("long",  String.valueOf(place.getLatLng().longitude));
+            intent.putExtra("ident",  place.getId());
+            startActivity(intent);
+
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
 
     @Override
     public void onAttach(Activity activity) {
@@ -151,7 +219,7 @@ public class MyPlacesListViewFragment extends Fragment implements LocationListen
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-
+        
     }
 
     @Override
@@ -163,6 +231,23 @@ public class MyPlacesListViewFragment extends Fragment implements LocationListen
     public void onProviderDisabled(String provider) {
 
     }
+
+
+    public String getCityFromLatLng(LatLng coordinates){
+
+        Geocoder gcd = new Geocoder(getContext(), Locale.getDefault());
+        List<Address> addresses = null;
+        try {
+            addresses = gcd.getFromLocation(coordinates.latitude, coordinates.longitude, 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (addresses.size() > 0)
+            return addresses.get(0).getLocality();
+
+        else return "Uknown city";
+    }
+
 }
 
 
