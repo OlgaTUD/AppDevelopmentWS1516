@@ -219,7 +219,7 @@ public class MyPlacesListViewFragment extends Fragment implements LocationListen
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-        
+
     }
 
     @Override
