@@ -17,7 +17,7 @@ import android.view.MenuItem;
 import com.rn.myplaces.myplaces.com.rn.myplaces.mapview.MapViewFragment;
 import com.rn.myplaces.myplaces.com.rn.myplaces.places.MyPlacesFragment;
 import com.rn.myplaces.myplaces.com.rn.myplaces.settings.ImprintFragment;
-import com.rn.myplaces.myplaces.com.rn.myplaces.settings.SettingsFragment;
+import com.rn.myplaces.myplaces.com.rn.myplaces.settings.NotificationCenter;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -74,16 +74,10 @@ public class MainActivity extends AppCompatActivity
                     .commit();
         } else if (position == 2) {
             fragmentManager.beginTransaction()
-                    .replace(R.id.container, SettingsFragment.newInstance())
+                    .replace(R.id.container, NotificationCenter.newInstance())
                     .commit();
         }
         else if (position == 3) {
-            fragmentManager.beginTransaction()
-                    .replace(R.id.container, SettingsFragment.newInstance())
-                    .commit();
-        }
-
-        else if (position == 4) {
             fragmentManager.beginTransaction()
                     .replace(R.id.container, ImprintFragment.newInstance())
                     .commit();
@@ -104,9 +98,6 @@ public class MainActivity extends AppCompatActivity
                 mTitle = getString(R.string.title_section5);
                 break;
             case 4:
-                mTitle = getString(R.string.title_section3);
-                break;
-            case 5:
                 mTitle = getString(R.string.title_section4);
                 break;
 

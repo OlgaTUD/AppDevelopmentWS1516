@@ -30,13 +30,7 @@ public class ImprintFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.imprint, container, false);
-
-        NotificationHelper db2 = NotificationHelper.getInstance(getContext());
-        for(Notification n: db2.getAllNotifications()){
-            System.out.println(n.getText());
-        }
-
-        return rootView;
+       return rootView;
     }
 
     @Override

@@ -99,10 +99,9 @@ public class AlarmReceiver extends BroadcastReceiver {
                         // Filter types and weather
                         if (!noRain){
                             //Remove places types not used for rain
-                            if (p.getTypes().contains("amusement_park") ||
-                                    p.getTypes().contains("park") ||
-                                    p.getTypes().contains("stadium") ||
-                                    p.getTypes().contains("amusement_park")
+                            if (p.getTypes().contains(" \"amusement_park\" " ) ||
+                                    p.getTypes().contains("\"park\"") ||
+                                    p.getTypes().contains("\"stadium\"")
                                     ){
                                 gplaces.remove(p);
                             }
@@ -220,28 +219,45 @@ public class AlarmReceiver extends BroadcastReceiver {
         db2 = NotificationHelper.getInstance(mContext);
 
         String text ="Would you like to visit ";
+        int num = places.size()-1;
 
             for (GooglePlace g : places){
                 String gid = g.getPlaceId();
                 for (Place p : db.getAllPlaces()) {
                     if (gid.equals(p.getIdentifikator())){
-                        text = text + p.getName();
+
+                        if(num == 0){
+                            String nottext = p.getName();
+                            text = text + nottext;
+                            Notification n = new Notification(nottext);
+                            db2.addNotification(n);
+                            break;
+                        }
+
+                        else{
+                            String nottext = p.getName();
+                            text = text + nottext + ", ";
+                            Notification n = new Notification(nottext);
+                            db2.addNotification(n);
+                            num = num - 1;
+                            break;
+                        }
                 }
             }
-            text = text + ".";
-            //System.out.println(text)
-            Notification n = new Notification(text);
-            db2.addNotification(n);
-
-            NotificationManager notif = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-            NotificationCompat.Builder mBuilder =
-                    new NotificationCompat.Builder(mContext)
-                            .setSmallIcon(R.drawable.cast_ic_notification_0)
-                            .setContentTitle("Your Places")
-                            .setContentText(text);
-            int mNotificationId = 001;
-            notif.notify(mNotificationId, mBuilder.build());
         }
+        text = text + ".";
+        //System.out.println(text);
+
+        NotificationManager notif = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(mContext)
+                        .setSmallIcon(R.drawable.cast_ic_notification_0)
+                        .setContentTitle("Your Places")
+                        .setContentText(text);
+        int mNotificationId = 001;
+        notif.notify(mNotificationId, mBuilder.build());
+
+
     }
 
     public String getCityFromLatLng(LatLng coordinates) {

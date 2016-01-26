@@ -14,7 +14,6 @@ public class PlacesHttpClient {
         private static String BASE_URL = "https://maps.googleapis.com/maps/api/place/details/json?placeid=";
         private static String KEY ="&key=AIzaSyC04KXB3TMSus2gCkZLBLrckaKW4UbnsGM" ;
 
-
         public String getPlaceData(String PLACE_ID) {
             HttpURLConnection con = null ;
             InputStream is = null;
