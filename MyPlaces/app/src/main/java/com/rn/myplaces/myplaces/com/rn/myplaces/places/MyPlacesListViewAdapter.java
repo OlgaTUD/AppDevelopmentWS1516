@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -40,12 +41,28 @@ import java.util.ArrayList;
             TextView place_name = (TextView) rowView.findViewById(R.id.place_names);
             TextView place_count = (TextView) rowView.findViewById(R.id.place_distance);
             ImageView place_markers = (ImageView) rowView.findViewById(R.id.icon_marker);
+            final TextView place_delete = (TextView) rowView.findViewById(R.id.place_delete);
 
             place_name.setText(places.get(position));
             place_count.setText(place_distance.get(position) + " meter");
             place_markers.setImageResource(place_marker.get(position));
 
             final Animation shake = AnimationUtils.loadAnimation(context, R.anim.raise);
+
+            place_delete.setOnTouchListener(new View.OnTouchListener() {
+
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+
+                    place_delete.startAnimation(shake);
+                  //  TODO
+                    //delete place
+
+                    return false;
+
+                }
+            });
+
             return rowView;
         };
     }
