@@ -343,17 +343,22 @@ public class AlarmReceiver extends BroadcastReceiver {
                 }
             }
         }
-        //System.out.println(text);
+        if(!removeList.isEmpty()){
+            for (GooglePlace r :removeList){
+                places.remove(r);
+            }
+        }
 
-        NotificationManager notif = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(mContext)
-                        .setSmallIcon(R.drawable.ic_action_map)
-                        .setContentTitle("Your Places")
-                        .setContentText(text);
-        int mNotificationId = 001;
-        notif.notify(mNotificationId, mBuilder.build());
-
+        if(!places.isEmpty()) {
+            NotificationManager notif = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationCompat.Builder mBuilder =
+                    new NotificationCompat.Builder(mContext)
+                            .setSmallIcon(R.drawable.ic_action_map)
+                            .setContentTitle("Your Places")
+                            .setContentText(text);
+            int mNotificationId = 001;
+            notif.notify(mNotificationId, mBuilder.build());
+        }
     }
 
 
