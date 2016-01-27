@@ -15,6 +15,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
+import android.text.format.Time;
 import android.widget.Toast;
 
 
@@ -48,6 +49,9 @@ public class AlarmReceiver extends BroadcastReceiver {
     private NotificationHelper db2;
     LocationManager lm;
 
+    private boolean noRain;
+    private boolean noSnow;
+
     @Override
     public void onReceive(Context arg0, Intent arg1) {
 
@@ -73,69 +77,31 @@ public class AlarmReceiver extends BroadcastReceiver {
             if (!places.isEmpty()) {
 
                 List<GooglePlace> gplaces = placeToGooglePlaceConverter(places);
+                List<GooglePlace> removeList = new ArrayList<GooglePlace>();
 
-                // Remove closed places
                 for (GooglePlace p : gplaces){
                     if(p.getNow()!=null) {
                         if (p.getNow().equals("false")) {
-                            gplaces.remove(p);
+                            removeList.add(p);
                         }
                     }
                 }
 
-                // GET PLACE TYPE AND WEATHER
+                for(GooglePlace p : removeList){
+                    gplaces.remove(p);
+                }
+
+                removeList.clear();
+
                 if(!gplaces.isEmpty()) {
 
                    String city =  getCityFromLatLng(new LatLng(location.getLatitude(), location.getLongitude()));
                    getWeather(city);
 
-                   // cold , hot, normal
                    String temperature = getTemperatureDescription();
-                   boolean noRain = weather.rain.getAmmount()==0.0;
-                   boolean noSnow = weather.snow.getAmmount()==0.0;
+                    noRain = weather.rain.getAmmount()==0.0;
+                    noSnow = weather.snow.getAmmount()==0.0;
 
-                    //System.out.println(noRain);
-                    for(GooglePlace p : gplaces) {
-                        // Filter types and weather
-                        if (!noRain){
-                            //Remove places types not used for rain
-                            if (p.getTypes().contains(" \"amusement_park\" " ) ||
-                                    p.getTypes().contains("\"park\"") ||
-                                    p.getTypes().contains("\"stadium\"")
-                                    ){
-                                gplaces.remove(p);
-                            }
-                        }
-
-                        if (!noSnow){
-                            //Remove places types not used for rain
-                            if (p.getTypes().contains("")){
-                                gplaces.remove(p);
-                            }
-
-                        }
-
-                        if (temperature.equals("cold")){
-                            //Remove places types not used for cold weather
-                            if (p.getTypes().contains("")){
-                                gplaces.remove(p);
-                            }
-                        }
-
-                        if (temperature.equals("hot")){
-                            //Remove places types not used for warm weather
-                            if (p.getTypes().contains("")){
-                                gplaces.remove(p);
-                            }
-                        }
-
-                        if (temperature.equals("normal")){
-                            if (p.getTypes().contains("")){
-                                gplaces.remove(p);
-                            }
-                        }
-
-                    }
                 }
 
                 pushNotification(gplaces);
@@ -172,7 +138,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             l2.setLongitude(Double.valueOf(p.getLong()));
             float distance_bw_one_and_two = current.distanceTo(l2);
 
-            if (distance_bw_one_and_two <= 2000) {
+            if (distance_bw_one_and_two <= 3000) {
 
                 places.add(p);
             }
@@ -217,6 +183,11 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void pushNotification(List<GooglePlace> places) {
 
         db2 = NotificationHelper.getInstance(mContext);
+        Time today = new Time(Time.getCurrentTimezone());
+        today.setToNow();
+
+        List<GooglePlace> removeList = new ArrayList<GooglePlace>();
+
 
         String text ="Would you like to visit ";
         int num = places.size()-1;
@@ -226,22 +197,146 @@ public class AlarmReceiver extends BroadcastReceiver {
                 for (Place p : db.getAllPlaces()) {
                     if (gid.equals(p.getIdentifikator())){
 
-                        if(num == 0){
-                            String nottext = p.getName();
-                            text = text + nottext;
-                            Notification n = new Notification(nottext);
-                            db2.addNotification(n);
-                            break;
+                        if (g.getTypes().contains("cafe")){
+                            if (today.hour > 12){
+                                System.out.println("123");
+                                removeList.add(g);
+                                break;
+                            }
+                            if(!noRain || !noSnow){
+                                if(num == 0){
+                                    String nottext = p.getName();
+                                    text = text + nottext + " and drink a warm coffee ?";
+                                    Notification n = new Notification(nottext);
+                                    db2.addNotification(n);
+                                    break;
+                                }
+                                else{
+                                    String nottext = p.getName();
+                                    text = text + nottext + "and drink a warm coffee, ";
+                                    Notification n = new Notification(nottext);
+                                    db2.addNotification(n);
+                                    num = num - 1;
+                                    break;
+                                }
+
+                            }
                         }
 
-                        else{
-                            String nottext = p.getName();
-                            text = text + nottext + ", ";
-                            Notification n = new Notification(nottext);
-                            db2.addNotification(n);
-                            num = num - 1;
-                            break;
-                        }
+                          else if(g.getTypes().contains("bar") ||
+                                    g.getTypes().contains("night_club") ||
+                                    g.getTypes().contains("bowling_alley")
+                                    ){
+
+                                if(num == 0){
+                                    String nottext = p.getName();
+                                    text = text + nottext;
+                                    Notification n = new Notification(nottext);
+                                    db2.addNotification(n);
+                                    break;
+                                }
+                                else{
+                                    String nottext = p.getName();
+                                    text = text + nottext;
+                                    Notification n = new Notification(nottext);
+                                    db2.addNotification(n);
+                                    num = num - 1;
+                                    break;
+                                }
+
+
+                            }
+
+                            else if (g.getTypes().contains("zoo" ) ||
+                                    g.getTypes().contains("park" ) ||
+                                    g.getTypes().contains("amusement_park" )
+                                    ){
+
+                                if(num == 0){
+                                    String nottext = p.getName();
+                                    text = text + nottext;
+                                    Notification n = new Notification(nottext);
+                                    db2.addNotification(n);
+                                    break;
+                                }
+                                else{
+                                    String nottext = p.getName();
+                                    text = text + nottext;
+                                    Notification n = new Notification(nottext);
+                                    db2.addNotification(n);
+                                    num = num - 1;
+                                    break;
+                                }
+
+                            }
+
+                            else if (g.getTypes().contains("aquarium" ) ||
+                                    g.getTypes().contains("art_gallery" ) ||
+                                    g.getTypes().contains("library" )
+                                    ){
+
+                                if(num == 0){
+                                    String nottext = p.getName();
+                                    text = text + nottext;
+                                    Notification n = new Notification(nottext);
+                                    db2.addNotification(n);
+                                    break;
+                                }
+                                else{
+                                    String nottext = p.getName();
+                                    text = text + nottext;
+                                    Notification n = new Notification(nottext);
+                                    db2.addNotification(n);
+                                    num = num - 1;
+                                    break;
+                                }
+
+                            }
+
+                            else if (g.getTypes().contains("spa" ) ||
+                                    g.getTypes().contains("beauty_salon" ) ||
+                                    g.getTypes().contains("hair_care" )
+                                    ){
+
+                                if(num == 0){
+                                    String nottext = p.getName();
+                                    text = text + nottext;
+                                    Notification n = new Notification(nottext);
+                                    db2.addNotification(n);
+                                    break;
+                                }
+                                else{
+                                    String nottext = p.getName();
+                                    text = text + nottext;
+                                    Notification n = new Notification(nottext);
+                                    db2.addNotification(n);
+                                    num = num - 1;
+                                    break;
+                                }
+
+                            }
+
+                            else{
+
+                            //System.out.println("no type");
+                                if(num == 0){
+                                    String nottext = p.getName();
+                                    text = text + nottext;
+                                    Notification n = new Notification(nottext);
+                                    db2.addNotification(n);
+                                    break;
+                                }
+                                else{
+                                    String nottext = p.getName();
+                                    text = text + nottext +", ";
+                                    Notification n = new Notification(nottext);
+                                    db2.addNotification(n);
+                                    num = num - 1;
+                                    break;
+                                }
+
+
+                            }
                 }
             }
         }
@@ -253,12 +348,14 @@ public class AlarmReceiver extends BroadcastReceiver {
                 new NotificationCompat.Builder(mContext)
                         .setSmallIcon(R.drawable.ic_action_map)
                         .setContentTitle("Your Places")
-                        .setContentText(text);
+                        .setContentText(text)
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText(text));
         int mNotificationId = 001;
         notif.notify(mNotificationId, mBuilder.build());
 
-
     }
+
 
     public String getCityFromLatLng(LatLng coordinates) {
 
