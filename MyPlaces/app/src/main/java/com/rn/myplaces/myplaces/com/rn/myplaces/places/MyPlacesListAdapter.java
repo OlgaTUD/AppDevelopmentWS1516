@@ -18,7 +18,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.rn.myplaces.myplaces.R;
-import com.rn.myplaces.myplaces.com.rn.myplaces.database.MySQLiteHelper;
 import com.rn.myplaces.myplaces.com.rn.myplaces.database.Place;
 import com.rn.myplaces.myplaces.com.rn.myplaces.mapview.MapViewFragment;
 
@@ -31,15 +30,20 @@ import java.util.ArrayList;
         private final ArrayList<Integer> place_number;
         public  FragmentManager fragmentManager;
 
+        int pposition;
+
     public MyPlacesListAdapter(Activity context, int resource, ArrayList<String> places,   ArrayList<Integer> place_number) {
             super(context, R.layout.myplaces_listitem, places);
             this.context=context;
             this.place_number = place_number;
             this.places = places;
-        }
+            pposition = 0;
+    }
 
         @SuppressLint({ "ViewHolder", "InflateParams", "CutPasteId" })
         public View getView(final int position,View view,ViewGroup parent) {
+
+            pposition = position;
 
             LayoutInflater inflater=context.getLayoutInflater();
             View rowView=inflater.inflate(R.layout.myplaces_listitem, null, true);
@@ -96,7 +100,7 @@ import java.util.ArrayList;
 
                     //passing data to the fragment
                     Bundle bundle=new Bundle();
-                    bundle.putString("city",places.get(position));
+                    bundle.putString("city", places.get(position));
                     Fragment tf = MyPlacesListViewFragment.newInstance();
                     tf.setArguments(bundle);
 
@@ -131,8 +135,13 @@ import java.util.ArrayList;
         //		"ListView" button clicked
         public void listViewClick() {
 
-            Fragment tf = new MyPlacesListViewFragment();
-            FragmentTransaction ft = ((FragmentActivity)context).getSupportFragmentManager().beginTransaction();
+            //passing data to the fragment
+            Bundle bundle=new Bundle();
+            bundle.putString("city",places.get(pposition));
+            Fragment tf = MyPlacesListViewFragment.newInstance();
+            tf.setArguments(bundle);
+
+            FragmentTransaction ft = ((FragmentActivity)getContext()).getSupportFragmentManager().beginTransaction();
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             ft.setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             ft.replace(R.id.container, tf);
