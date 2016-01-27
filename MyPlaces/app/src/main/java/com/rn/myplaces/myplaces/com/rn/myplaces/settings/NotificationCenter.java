@@ -37,12 +37,13 @@ public class NotificationCenter extends Fragment {
         TextView text3 =(TextView) rootView.findViewById(R.id.textView3);
         TextView text4 =(TextView) rootView.findViewById(R.id.textView4);
         TextView text5 =(TextView) rootView.findViewById(R.id.textView5);
+        TextView text6 =(TextView) rootView.findViewById(R.id.textView6);
 
         NotificationHelper db2 = NotificationHelper.getInstance(getContext());
 
         int num = db2.getAllNotifications().size();
-        if (num>5){
-            int minus = num -5;
+        if (num>6){
+            int minus = num -6;
             {
                 for(int i=0;i<minus;i++){
                     db2.deleteNotification(db2.getAllNotifications().get(0));
@@ -53,6 +54,14 @@ public class NotificationCenter extends Fragment {
         List<Notification> list = db2.getAllNotifications();
 
         switch (list.size()) {
+            case (6): {
+                text1.setText(list.get(0).getText());
+                text2.setText(list.get(1).getText());
+                text3.setText(list.get(2).getText());
+                text4.setText(list.get(3).getText());
+                text5.setText(list.get(4).getText());
+                text6.setText(list.get(5).getText());
+            }
             case (5): {
                 text1.setText(list.get(0).getText());
                 text2.setText(list.get(1).getText());
