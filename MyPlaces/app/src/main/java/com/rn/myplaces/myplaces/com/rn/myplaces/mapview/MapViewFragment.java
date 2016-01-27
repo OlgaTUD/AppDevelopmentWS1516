@@ -35,6 +35,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.rn.myplaces.myplaces.MainActivity;
 import com.rn.myplaces.myplaces.R;
 import com.rn.myplaces.myplaces.com.rn.myplaces.database.MySQLiteHelper;
+import com.rn.myplaces.myplaces.com.rn.myplaces.database.Notification;
+import com.rn.myplaces.myplaces.com.rn.myplaces.database.NotificationHelper;
 import com.rn.myplaces.myplaces.com.rn.myplaces.database.Place;
 import com.rn.myplaces.myplaces.com.rn.myplaces.places.MyPlacesFragment;
 import com.rn.myplaces.myplaces.com.rn.myplaces.places.NewPlaceActivity;
@@ -62,7 +64,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
     private Activity act;
 
     private MySQLiteHelper db;
-
+    private NotificationHelper db2;
     public static MapViewFragment newInstance() {
         MapViewFragment fragment = new MapViewFragment();
         return fragment;
@@ -76,6 +78,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
         act = getActivity();
         db = MySQLiteHelper.getInstance(getContext());
+        db2 = NotificationHelper.getInstance(getContext());
 
         View rootView = inflater.inflate(R.layout.mapview, container, false);
         MyPlacesFragment.isVisible = false;
@@ -138,6 +141,10 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
             public void onClick(View v) {
                 for (Place p : db.getAllPlaces()){
                     db.deletePlace(p);
+                }
+
+                for (Notification n : db2.getAllNotifications()){
+                    db2.deleteNotification(n);
                 }
 
                 Toast.makeText(getActivity(), "All places removed",

@@ -55,8 +55,6 @@ public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context arg0, Intent arg1) {
 
-        System.out.println("Alarm");
-
         mContext = arg0;
         db = MySQLiteHelper.getInstance(mContext);
         lm = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
@@ -198,8 +196,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                     if (gid.equals(p.getIdentifikator())){
 
                         if (g.getTypes().contains("cafe")){
-                            if (today.hour > 12){
-                                System.out.println("123");
+                            if (today.hour > 13){
                                 removeList.add(g);
                                 break;
                             }
@@ -227,17 +224,20 @@ public class AlarmReceiver extends BroadcastReceiver {
                                     g.getTypes().contains("night_club") ||
                                     g.getTypes().contains("bowling_alley")
                                     ){
-
+                            if (today.hour < 19){
+                                removeList.add(g);
+                                break;
+                            }
                                 if(num == 0){
                                     String nottext = p.getName();
-                                    text = text + nottext;
+                                    text = text + nottext + " and have a drink?";
                                     Notification n = new Notification(nottext);
                                     db2.addNotification(n);
                                     break;
                                 }
                                 else{
                                     String nottext = p.getName();
-                                    text = text + nottext;
+                                    text = text + nottext + " and have a drink, ";;
                                     Notification n = new Notification(nottext);
                                     db2.addNotification(n);
                                     num = num - 1;
@@ -252,16 +252,21 @@ public class AlarmReceiver extends BroadcastReceiver {
                                     g.getTypes().contains("amusement_park" )
                                     ){
 
+                            if (today.hour > 19 || !noRain || !noSnow){
+                                removeList.add(g);
+                                break;
+                            }
+
                                 if(num == 0){
                                     String nottext = p.getName();
-                                    text = text + nottext;
+                                    text = text + nottext + ".";
                                     Notification n = new Notification(nottext);
                                     db2.addNotification(n);
                                     break;
                                 }
                                 else{
                                     String nottext = p.getName();
-                                    text = text + nottext;
+                                    text = text + nottext + ", ";
                                     Notification n = new Notification(nottext);
                                     db2.addNotification(n);
                                     num = num - 1;
@@ -277,14 +282,14 @@ public class AlarmReceiver extends BroadcastReceiver {
 
                                 if(num == 0){
                                     String nottext = p.getName();
-                                    text = text + nottext;
+                                    text = text + nottext + " and discover something new?";
                                     Notification n = new Notification(nottext);
                                     db2.addNotification(n);
                                     break;
                                 }
                                 else{
                                     String nottext = p.getName();
-                                    text = text + nottext;
+                                    text = text + nottext + " and discover something new, ";
                                     Notification n = new Notification(nottext);
                                     db2.addNotification(n);
                                     num = num - 1;
@@ -300,14 +305,14 @@ public class AlarmReceiver extends BroadcastReceiver {
 
                                 if(num == 0){
                                     String nottext = p.getName();
-                                    text = text + nottext;
+                                    text = text + nottext + " and relax a bit?";
                                     Notification n = new Notification(nottext);
                                     db2.addNotification(n);
                                     break;
                                 }
                                 else{
                                     String nottext = p.getName();
-                                    text = text + nottext;
+                                    text = text + nottext + " and relax a bit, ";
                                     Notification n = new Notification(nottext);
                                     db2.addNotification(n);
                                     num = num - 1;
@@ -317,11 +322,9 @@ public class AlarmReceiver extends BroadcastReceiver {
                             }
 
                             else{
-
-                            //System.out.println("no type");
                                 if(num == 0){
                                     String nottext = p.getName();
-                                    text = text + nottext;
+                                    text = text + nottext + "." ;
                                     Notification n = new Notification(nottext);
                                     db2.addNotification(n);
                                     break;
@@ -340,7 +343,6 @@ public class AlarmReceiver extends BroadcastReceiver {
                 }
             }
         }
-        text = text + ".";
         //System.out.println(text);
 
         NotificationManager notif = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -348,9 +350,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                 new NotificationCompat.Builder(mContext)
                         .setSmallIcon(R.drawable.ic_action_map)
                         .setContentTitle("Your Places")
-                        .setContentText(text)
-                        .setStyle(new NotificationCompat.BigTextStyle()
-                                .bigText(text));
+                        .setContentText(text);
         int mNotificationId = 001;
         notif.notify(mNotificationId, mBuilder.build());
 
