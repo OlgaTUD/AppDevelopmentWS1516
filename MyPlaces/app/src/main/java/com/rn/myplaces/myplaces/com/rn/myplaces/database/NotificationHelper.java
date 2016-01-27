@@ -65,6 +65,12 @@ public class NotificationHelper extends SQLiteOpenHelper {
     public void addNotification(Notification notif) {
         SQLiteDatabase db = this.getWritableDatabase();
 
+        for(Notification p : this.getAllNotifications()){
+            if (p.getText().equals(notif.getText())){
+                return;
+            }
+        }
+
         ContentValues values = new ContentValues();
         values.put(NOTIFICATION_NAME, notif.getText()); //
         // Inserting Row

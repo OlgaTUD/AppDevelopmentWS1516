@@ -21,6 +21,11 @@ public class JSONPlaceParser {
             String types = getString("types", coordObj);
             types = types.substring(1,types.length()-1);
             String[] typesarray = types.split(",");
+
+            for(int i=0;i<typesarray.length;i++){
+                typesarray[i] = typesarray[i].substring(1,typesarray[i].length()-1);
+            }
+
             ArrayList typeslist = new ArrayList(Arrays.asList(typesarray));
             place.setTypes(typeslist);
 

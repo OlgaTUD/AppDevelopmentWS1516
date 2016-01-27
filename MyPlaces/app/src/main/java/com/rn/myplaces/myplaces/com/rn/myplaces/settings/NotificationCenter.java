@@ -42,6 +42,7 @@ public class NotificationCenter extends Fragment {
         NotificationHelper db2 = NotificationHelper.getInstance(getContext());
 
         int num = db2.getAllNotifications().size();
+        System.out.println(num);
         if (num>6){
             int minus = num -6;
             {
