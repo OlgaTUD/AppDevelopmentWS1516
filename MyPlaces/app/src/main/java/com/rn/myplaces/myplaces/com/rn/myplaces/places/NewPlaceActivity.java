@@ -11,6 +11,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
+
 import com.rn.myplaces.myplaces.R;
 import com.rn.myplaces.myplaces.com.rn.myplaces.database.MySQLiteHelper;
 import com.rn.myplaces.myplaces.com.rn.myplaces.database.Place;
@@ -52,6 +54,13 @@ public class NewPlaceActivity extends AppCompatActivity {
 
         EditText locationfield = (EditText) findViewById(R.id.location_field);
         locationfield.setText(city);
+
+        TextView adressView = (TextView) findViewById(R.id.adress);
+        adressView.setText(adress);
+        TextView latView = (TextView) findViewById(R.id.lat);
+        latView.setText(lat);
+        TextView lontitudeView = (TextView) findViewById(R.id.longtitude);
+        lontitudeView.setText(longt);
 
     }
 

@@ -50,6 +50,48 @@
                 android:textCursorDrawable="@drawable/color_cursor">></EditText>
         </TableRow>
 
+        <TableRow
+            android:id="@+id/adressrow"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:padding="7dp">
+            <TextView
+                android:padding="7dp"
+                android:text="Adress"></TextView>
+            <TextView
+                android:id="@+id/adress"
+                android:padding="7dp"
+                android:text=""></TextView>
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/latrow"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:padding="7dp">
+            <TextView
+                android:padding="7dp"
+                android:text="Lattitude"></TextView>
+            <TextView
+                android:id="@+id/lat"
+                android:padding="7dp"
+                android:text=""></TextView>
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/longrow"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:padding="7dp">
+            <TextView
+                android:padding="7dp"
+                android:text="Longtitude"></TextView>
+            <TextView
+                android:id="@+id/longtitude"
+                android:padding="7dp"
+                android:text=""></TextView>
+        </TableRow>
+
 
 
 
