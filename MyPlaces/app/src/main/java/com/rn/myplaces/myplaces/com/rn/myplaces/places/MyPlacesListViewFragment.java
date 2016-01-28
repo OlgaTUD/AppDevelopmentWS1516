@@ -80,36 +80,32 @@ public class MyPlacesListViewFragment extends Fragment implements LocationListen
 
         Bundle bundle = this.getArguments();
         String place_name = bundle.getString("city");
+
         ArrayList<String> places_name = new ArrayList<String>();
+        ArrayList<Integer> places_distance = new ArrayList<Integer>();
+        ArrayList<String> places_adresses = new ArrayList<String>();
+        ArrayList<Integer> places_marker = new ArrayList<Integer>();
 
         db = MySQLiteHelper.getInstance(getContext());
 
         for (Place p : db.getAllPlaces()) {
             if (p.getCity().equals(place_name)) {
-                places_name.add(p.getName());
-            }
-        }
 
-        //List of Places
-        ArrayList<Integer> places_distance = new ArrayList<Integer>();
-        for (Place p : db.getAllPlaces()) {
-            if (p.getCity().equals(place_name)) {
+                places_name.add(p.getName());
+                places_adresses.add(p.getAdress());
+
                 Location loc = new Location("loc");
                 loc.setLatitude(Double.valueOf(p.getLat()));
                 loc.setLongitude(Double.valueOf(p.getLong()));
                 places_distance.add((int) getDistance(loc, location));
+
+                places_marker.add(R.drawable.ic_loc_blue);
+
             }
         }
 
-
-        ArrayList<Integer> places_marker = new ArrayList<Integer>();
-
-        for (int i = 0; i < place_name.length(); i++) {
-            places_marker.add(R.drawable.ic_loc_blue);
-        }
-
         ArrayAdapter adapter =
-                new MyPlacesListViewAdapter(getActivity(), R.layout.myplaces_listitem2, places_name, places_distance, places_marker);
+                new MyPlacesListViewAdapter(getActivity(), R.layout.myplaces_listitem2, places_name, places_adresses, places_distance, places_marker);
         listview.setAdapter(adapter);
 
         FAB2 = (ImageButton) rootView.findViewById(R.id.imageButton_lv);
