@@ -44,6 +44,7 @@ import java.util.ArrayList;
             final TextView place_delete = (TextView) rowView.findViewById(R.id.place_delete);
 
             place_name.setText(places.get(position));
+            place_delete.setText("x");
             place_count.setText(place_distance.get(position) + " meter");
             place_markers.setImageResource(place_marker.get(position));
 
